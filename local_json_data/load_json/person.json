@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Eddy Mendes",
+    "age": "26",
+    "height": "182",
+    "gender": "male",
+    "hair_color": "black"
+  },
+  {
+    "name": "Dulce Helena",
+    "age": "26",
+    "height": "162",
+    "gender": "female",
+    "hair_color": "black"
+  },
+  {
+    "name": "Lucas Davi",
+    "age": "2",
+    "height": "36",
+    "gender": "male",
+    "hair_color": "brow"
+  },
+  {
+    "name": "Freeman",
+    "age": "28",
+    "height": "192",
+    "gender": "female",
+    "hair_color": "yelow"
+  }
+]

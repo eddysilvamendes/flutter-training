@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "523487821453",
+    "project_id": "flutter-demo-b108d",
+    "storage_bucket": "flutter-demo-b108d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523487821453:android:7fc76190c656b0e15decc4",
+        "android_client_info": {
+          "package_name": "freeman.fdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523487821453-iaqsa0ri71050f6sidn08hv6aufti49c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "freeman.fdemo",
+            "certificate_hash": "aac73aaaa1f72f923a72a11b4cd51f49c08e4a93"
+          }
+        },
+        {
+          "client_id": "523487821453-rtm58evsns3tt8i7s8ri1hin1s9fcn3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK0zOMZ5u_SO1krKl_36bpm11xbob2FYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523487821453-rtm58evsns3tt8i7s8ri1hin1s9fcn3u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
