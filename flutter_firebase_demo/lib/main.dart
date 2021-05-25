@@ -17,19 +17,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<User> _sighIn() async {
-    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    GoogleSignInAuthentication gSa = await googleSignInAccount.authentication;
-
-    User user = await _auth.signInWithGoogle(
-        idToken: gSa.idToken, acessToken: gSa.accessToken);
-    print("User Name : ${user.displayName}");
-    return user;
+  void _signOut() {
+    googleSignIn.signOut();
+    print("User Signed Out");
   }
+
+  void _add() {}
+
+  void _delete() {}
+
+  void _update() {}
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +52,13 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             RaisedButton(
-              onPressed: () => _sighIn()
-                  .then((User user) => print(user))
-                  .catchError((e) => print(e)),
+              onPressed: () => {},
               child: Text("Sign in"),
               color: Colors.green,
             ),
             Padding(padding: EdgeInsets.all(10.0)),
             RaisedButton(
-              onPressed: null,
+              onPressed: _signOut,
               child: Text("Sign Out"),
               color: Colors.red,
             )
