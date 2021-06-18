@@ -1,69 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_firebase_demo/Navigation/navigation_drawer.dart';
+// ignore: unused_import
+import 'package:flutter_firebase_demo/Wallpaper/wall_screen.dart';
+import 'package:flutter_firebase_demo/pages/home_creen.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(new MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primaryColor: Colors.blue),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-
-  void _signOut() {
-    googleSignIn.signOut();
-    print("User Signed Out");
-  }
-
-  void _add() {}
-
-  void _delete() {}
-
-  void _update() {}
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Firebase Demo"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            RaisedButton(
-              onPressed: () => {},
-              child: Text("Sign in"),
-              color: Colors.green,
-            ),
-            Padding(padding: EdgeInsets.all(10.0)),
-            RaisedButton(
-              onPressed: _signOut,
-              child: Text("Sign Out"),
-              color: Colors.red,
-            )
-          ],
+    return new MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        drawer: NavigationDrawerWidget(),
+        appBar: AppBar(
+          title: Text("FireBase App"),
         ),
+        body: HomeScreen(),
       ),
     );
   }
