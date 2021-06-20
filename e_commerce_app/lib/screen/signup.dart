@@ -31,6 +31,7 @@ final TextEditingController address = TextEditingController();
 class _SignUpState extends State<SignUp> {
   void signUpsubmit() async {
     print("SignUp Submited");
+    // ignore: unused_local_variable
     final FormState _form = _formkey.currentState;
     try {
       UserCredential result = await FirebaseAuth.instance

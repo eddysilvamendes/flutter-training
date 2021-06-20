@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/provider/product_provider.dart';
 import 'package:e_commerce_app/screen/home.dart';
 import 'package:e_commerce_app/widgets/cartsingleproduct.dart';
 import 'package:e_commerce_app/widgets/notification_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,8 +13,16 @@ class CheckOut extends StatefulWidget {
 }
 
 ProductProvider productProvider;
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _CheckOutState extends State<CheckOut> {
+  User user = FirebaseAuth.instance.currentUser;
+  double subtotal = 0;
+  double discount = 3;
+  double discountRuppes;
+  double shipping = 60;
+  double total;
+  int index;
   Widget _buildBottomDetail(String startName, String endName) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,34 +39,77 @@ class _CheckOutState extends State<CheckOut> {
     );
   }
 
+  Widget _buildBuyButtom() {
+    return Column(
+      children: productProvider.userModelList.map((e) {
+        // ignore: deprecated_member_use
+        return RaisedButton(
+          onPressed: () {
+            if (productProvider.checkOutModellList.isNotEmpty) {
+              FirebaseFirestore.instance.collection("Order").doc(user.uid).set({
+                "Product": productProvider.checkOutModellList
+                    .map((c) => {
+                          "Product Name": c.name,
+                          "Product Price": c.price,
+                          "Product Quantity": c.quantity,
+                        })
+                    .toList(),
+                "Product Total": total.toStringAsFixed(2),
+                "User Name": e.userName,
+                "User Email": e.userEmail,
+                "User Number": e.userPhoneNumber,
+                "User Adress": e.userAdress,
+                "UserUid": user.uid,
+              });
+              productProvider.clearCheckOutProduct();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => HomePage(),
+                ),
+              );
+            } else {
+              // ignore: deprecated_member_use
+              _scaffoldKey.currentState?.showSnackBar(
+                SnackBar(
+                  content: Text("Cart is Empty"),
+                ),
+              );
+            }
+          },
+          child: Text(
+            "Buy",
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+          color: Color(0xff746bc9),
+        );
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    double subtotal = 0;
-    double discount = 3;
-    double discountRuppes;
-    double shipping = 60;
-    double total;
     productProvider = Provider.of<ProductProvider>(context);
+
     productProvider.getCheckOutModelList.forEach((element) {
       subtotal += element.price * element.quantity;
     });
+    if (productProvider.checkOutModellList.isEmpty) {
+      total = 0.0;
+      discount = 0.0;
+      shipping = 0.0;
+    }
     discountRuppes = discount / 100 * subtotal;
     total = subtotal + shipping - discountRuppes;
+
     return Scaffold(
+      key: _scaffoldKey,
       bottomNavigationBar: Container(
         height: 70,
         width: 100,
         margin: EdgeInsets.symmetric(horizontal: 10),
         padding: EdgeInsets.only(bottom: 10),
         // ignore: deprecated_member_use
-        child: RaisedButton(
-          onPressed: () {},
-          child: Text(
-            "Buy",
-            style: TextStyle(fontSize: 18, color: Colors.white),
-          ),
-          color: Color(0xff746bc9),
-        ),
+        child: _buildBuyButtom(),
       ),
       appBar: AppBar(
         title: Text(
@@ -93,13 +146,16 @@ class _CheckOutState extends State<CheckOut> {
               height: 160,
               child: ListView.builder(
                 itemCount: productProvider.getCheckOutModeListLength,
-                itemBuilder: (context, index) {
+                itemBuilder: (context, myIndex) {
+                  index = myIndex;
                   return CartSingleProduct(
-                    image: productProvider.getCheckOutModelList[index].image,
-                    name: productProvider.getCheckOutModelList[index].name,
-                    price: productProvider.getCheckOutModelList[index].price,
+                    isCount: true,
+                    index: myIndex,
+                    image: productProvider.getCheckOutModelList[myIndex].image,
+                    name: productProvider.getCheckOutModelList[myIndex].name,
+                    price: productProvider.getCheckOutModelList[myIndex].price,
                     quantity:
-                        productProvider.getCheckOutModelList[index].quantity,
+                        productProvider.getCheckOutModelList[myIndex].quantity,
                   );
                 },
               ),

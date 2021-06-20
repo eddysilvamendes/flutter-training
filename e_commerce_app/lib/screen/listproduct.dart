@@ -1,9 +1,7 @@
 import 'package:e_commerce_app/model/product.dart';
-import 'package:e_commerce_app/screen/home.dart';
 import 'package:e_commerce_app/widgets/notification_button.dart';
 import 'package:e_commerce_app/widgets/singleproduct.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class ListProduct extends StatelessWidget {
   // Widget _buildMyGridView() {

@@ -1,17 +1,23 @@
 import 'package:e_commerce_app/provider/product_provider.dart';
-import 'package:e_commerce_app/screen/cartscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class CartSingleProduct extends StatefulWidget {
   final String name;
   final String image;
   final double price;
   int quantity;
   bool isCount;
+  final int index;
 
   CartSingleProduct(
-      {this.image, this.name, this.price, this.quantity, this.isCount});
+      {this.image,
+      this.name,
+      this.price,
+      this.quantity,
+      this.isCount,
+      this.index});
 
   @override
   _CartSingleProductState createState() => _CartSingleProductState();
@@ -23,11 +29,7 @@ class _CartSingleProductState extends State<CartSingleProduct> {
   @override
   Widget build(BuildContext context) {
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
-    // productProvider.getCheckOutData(
-    //     quantity: widget.quantity,
-    //     image: widget.image,
-    //     name: widget.name,
-    //     price: widget.price);
+
     return Container(
       height: 150,
       width: double.infinity,
@@ -49,13 +51,31 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                 ),
                 Container(
                   height: 140,
-                  width: 200,
+                  width: widget.isCount == true ? 250 : 270,
                   child: ListTile(
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.name),
+                        Container(
+                          height: 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(widget.name),
+                              IconButton(
+                                onPressed: () {
+                                  widget.isCount == false
+                                      ? productProvider
+                                          .deleteCartProduct(widget.index)
+                                      : productProvider
+                                          .deleteCheckOutProduct(widget.index);
+                                },
+                                icon: Icon(Icons.close),
+                              )
+                            ],
+                          ),
+                        ),
                         Text("Cloths"),
                         Text(
                           "\$ ${widget.price}",

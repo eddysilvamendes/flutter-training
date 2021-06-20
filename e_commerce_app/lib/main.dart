@@ -2,7 +2,6 @@ import 'package:e_commerce_app/provider/category_provider.dart';
 import 'package:e_commerce_app/provider/product_provider.dart';
 import 'package:e_commerce_app/screen/home.dart';
 import 'package:e_commerce_app/screen/login.dart';
-import 'package:e_commerce_app/screen/profilescreen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

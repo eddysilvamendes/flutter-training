@@ -1,4 +1,3 @@
-import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/provider/product_provider.dart';
 import 'package:e_commerce_app/screen/cartscreen.dart';
 import 'package:e_commerce_app/screen/home.dart';
@@ -83,7 +82,10 @@ class _DetailScreenState extends State<DetailScreen> {
         children: [
           Text(
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.justify,
           )
         ],
       ),

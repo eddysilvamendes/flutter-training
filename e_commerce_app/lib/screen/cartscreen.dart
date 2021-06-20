@@ -1,6 +1,5 @@
 import 'package:e_commerce_app/provider/product_provider.dart';
 import 'package:e_commerce_app/screen/checkOutscreen.dart';
-import 'package:e_commerce_app/screen/detailscreen.dart';
 import 'package:e_commerce_app/screen/home.dart';
 import 'package:e_commerce_app/widgets/cartsingleproduct.dart';
 import 'package:e_commerce_app/widgets/notification_button.dart';
@@ -69,6 +68,7 @@ class _CartScreenState extends State<CartScreen> {
         itemCount: productProvider.getCartModelLength,
         itemBuilder: (context, index) => CartSingleProduct(
           isCount: false,
+          index: index,
           image: productProvider.getCartModelList[index].image,
           name: productProvider.getCartModelList[index].name,
           price: productProvider.getCartModelList[index].price,

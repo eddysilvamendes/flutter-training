@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/usermodel.dart';
 import 'package:e_commerce_app/provider/product_provider.dart';
 import 'package:e_commerce_app/screen/home.dart';
+import 'package:e_commerce_app/screen/signup.dart';
 import 'package:e_commerce_app/widgets/mybutton.dart';
+import 'package:e_commerce_app/widgets/mytextformfield.dart';
 import 'package:e_commerce_app/widgets/notification_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +20,41 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   ProductProvider productProvider;
+  // ignore: unused_field
   File _pickedImage;
   PickedFile _image;
+  User user = FirebaseAuth.instance.currentUser;
+  Reference reference;
+  TaskSnapshot snapshot;
+  UploadTask uploadTask;
+  String userUid;
+  String userImage;
+  String imageUrl;
+
+  bool centerCircle = false;
+  var imageMap;
+  void userDetailUpdate() async {
+    // setState(() {
+    //   centerCircle = true;
+    // });
+    // _pickedImage != null
+    //     ? imageMap =  _uploadImage(image: _pickedImage)
+    //     : Container();
+
+    FirebaseFirestore.instance.collection("User").doc(user.uid).update({
+      "UserName": userName.text,
+      "UserGender": isMale == true ? "Male" : "Female",
+      "Phone": phoneNumber.text,
+      "UserImage": imageUrl == null ? "" : imageUrl,
+      "Adress": adress.text
+    });
+    // setState(() {
+    //   centerCircle = false;
+    // });
+    setState(() {
+      edit = false;
+    });
+  }
 
   Future<void> getImage({ImageSource source}) async {
     _image = await ImagePicker().getImage(source: source);
@@ -28,41 +64,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  String imageUrl;
+  // ignore: unused_element
   void _uploadImage({File image}) async {
-    User user = FirebaseAuth.instance.currentUser;
-    Reference reference =
-        FirebaseStorage.instance.ref().child("UserImage/${user.uid}");
-    UploadTask uploadTask = reference.putFile(image);
-    TaskSnapshot snapshot = await uploadTask;
+    if (image == null) return;
+
+    reference = FirebaseStorage.instance.ref().child("UserImage/${user.uid}");
+    print(reference.toString());
+    uploadTask = reference.putFile(image);
+    snapshot = await uploadTask.whenComplete(() {});
     imageUrl = await snapshot.ref.getDownloadURL();
+    //return imageUrl;
+  }
+
+  TextEditingController userName = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController adress = TextEditingController();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void validation() async {
+    if (userName.text.isEmpty && phoneNumber.text.isEmpty) {
+      _scaffoldKey.currentState
+          // ignore: deprecated_member_use
+          ?.showSnackBar(SnackBar(content: Text(" Flied Are Empty")));
+    } else if (userName.text.length < 6) {
+      // ignore: deprecated_member_use
+      _scaffoldKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text("Username Is Too Short"),
+        ),
+      );
+    } else if (phoneNumber.text.length < 7 || phoneNumber.text.length > 7) {
+      // ignore: deprecated_member_use
+      _scaffoldKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text("Phone Number Must Be 7 "),
+        ),
+      );
+    } else {
+      print("tudo ok");
+      print(userName.text);
+      print(adress.text);
+      print(phoneNumber.text);
+      print(isMale);
+      print(imageUrl);
+      // _uploadImage(image: _pickedImage);
+      userDetailUpdate();
+    }
   }
 
   TextStyle mystyleField = TextStyle(fontSize: 17, color: Colors.black45);
 
   TextStyle mystyleData = TextStyle(fontSize: 17, fontWeight: FontWeight.bold);
 
-  Widget _buildSingleContainer({String startText, String endText}) {
+  // Widget _buildSingleContainer({String startText, String endText}) {
+  //   return Card(
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+  //     child: Container(
+  //       height: 50,
+  //       padding: EdgeInsets.symmetric(horizontal: 20),
+  //       width: double.infinity,
+  //       decoration: BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.circular(30),
+  //       ),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           Text(
+  //             startText,
+  //             style: mystyleField,
+  //           ),
+  //           Text(
+  //             endText,
+  //             style: mystyleData,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _buildSingleContainer(
+      {Color color, String startText, String endText}) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       child: Container(
-        height: 50,
+        height: 55,
         padding: EdgeInsets.symmetric(horizontal: 20),
-        width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          color: edit == true ? color : Colors.white,
+          borderRadius: edit == false
+              ? BorderRadius.circular(30)
+              : BorderRadius.circular(0),
         ),
+        width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               startText,
-              style: mystyleField,
+              style: TextStyle(fontSize: 17, color: Colors.black45),
             ),
             Text(
               endText,
-              style: mystyleData,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -70,6 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildSingleTextFormField({String name}) {
     return TextFormField(
       decoration: InputDecoration(
@@ -87,6 +197,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     List<UserModel> userModel = productprovider.getUserModelList;
     return Column(
       children: userModel.map((e) {
+        userImage = e.userImage;
+        userName = TextEditingController(text: e.userName);
+        phoneNumber = TextEditingController(text: e.userPhoneNumber);
+        adress = TextEditingController(text: e.userAdress);
+        if (e.userGender == "Male") {
+          setState(() {
+            isMale = true;
+          });
+        } else {
+          setState(() {
+            isMale = false;
+          });
+        }
+
         return Container(
           height: 350,
           child: Column(
@@ -160,18 +284,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildSingleTextFormField(name: e.userName),
-              _buildSingleTextFormField(
-                name: e.userEmail,
+              MyTextFormField(
+                name: "UserName",
+                controller: userName,
               ),
-              _buildSingleTextFormField(
-                name: e.userGender,
+              _buildSingleContainer(
+                color: Colors.grey[300],
+                endText: e.userEmail,
+                startText: "Email",
               ),
-              _buildSingleTextFormField(
-                name: e.userGender,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isMale = !isMale;
+                  });
+                },
+                child: _buildSingleContainer(
+                  color: Colors.white,
+                  endText: isMale == true ? "Male" : "Female",
+                  startText: "Gender",
+                ),
               ),
-              _buildSingleTextFormField(
-                name: e.userAdress,
+              MyTextFormField(
+                name: "Phone Number",
+                controller: phoneNumber,
+              ),
+              MyTextFormField(
+                name: "Adress",
+                controller: adress,
               ),
             ],
           ),
@@ -184,6 +324,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     productProvider = Provider.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      key: _scaffoldKey,
       backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
         leading: edit == true
@@ -222,10 +364,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ? NotificationButton()
               : IconButton(
                   onPressed: () {
-                    _uploadImage(image: _pickedImage);
-                    setState(() {
-                      edit = false;
-                    });
+                    print(adress.text);
+                    validation();
+                    // setState(() {
+                    //   edit = false;
+                    // });
                   },
                   icon: Icon(
                     Icons.check,
@@ -252,10 +395,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       CircleAvatar(
                         maxRadius: 65,
-                        backgroundImage: _pickedImage == null
+                        backgroundImage: userImage == null
                             ? NetworkImage(
                                 "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg")
-                            : FileImage(_pickedImage),
+                            : NetworkImage(userImage),
                       ),
                     ],
                   ),

@@ -1,5 +1,4 @@
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_app/model/categoryicon.dart';
 import 'package:e_commerce_app/model/product.dart';
 import 'package:e_commerce_app/model/usermodel.dart';
@@ -420,7 +419,11 @@ class _HomePageState extends State<HomePage> {
     List<UserModel> userModel = productprovider.getUserModelList;
     return Row(
         children: userModel.map((e) {
-      return MyDrawer(userName: e.userName, userEmail: e.userEmail);
+      return MyDrawer(
+        userName: e.userName,
+        userEmail: e.userEmail,
+        userImage: e.userImage,
+      );
     }).toList());
   }
 

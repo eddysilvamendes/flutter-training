@@ -24,17 +24,18 @@ class ProductProvider with ChangeNotifier {
       (element) {
         if (currentUser.uid == element["UserId"]) {
           userModel = UserModel(
-            userEmail: element["Email"],
-            userGender: element["UserGender"],
-            userName: element["UserName"],
-            userPhoneNumber: element["Phone"],
-            userAdress: element["Adress"],
-          );
+              userEmail: element["Email"],
+              userGender: element["UserGender"],
+              userName: element["UserName"],
+              userPhoneNumber: element["Phone"],
+              userAdress: element["Adress"],
+              userImage: element["UserImage"]);
           newList.add(userModel);
         }
         userModelList = newList;
       },
     );
+    notifyListeners();
   }
 
   List<UserModel> get getUserModelList {
@@ -65,6 +66,21 @@ class ProductProvider with ChangeNotifier {
   }
 
   //--------------------------------------------------------
+
+  void deleteCartProduct(int index) {
+    cartModelList.removeAt(index);
+    notifyListeners();
+  }
+
+  void deleteCheckOutProduct(int index) {
+    checkOutModellList.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearCheckOutProduct() {
+    checkOutModellList.clear();
+    notifyListeners();
+  }
 
   List<CartModel> cartModelList = [];
   CartModel cartModel;
