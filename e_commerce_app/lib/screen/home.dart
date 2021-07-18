@@ -6,6 +6,7 @@ import 'package:e_commerce_app/provider/category_provider.dart';
 import 'package:e_commerce_app/provider/product_provider.dart';
 import 'package:e_commerce_app/screen/detailscreen.dart';
 import 'package:e_commerce_app/screen/listproduct.dart';
+import 'package:e_commerce_app/screen/searchcategory.dart';
 import 'package:e_commerce_app/widgets/drawerscreen.dart';
 import 'package:e_commerce_app/widgets/notification_button.dart';
 import 'package:e_commerce_app/widgets/singleproduct.dart';
@@ -228,6 +229,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (ctx) => ListProduct(
                       name: "Featured",
                       snapShot: feature,
+                      isCategory: false,
                     ),
                   ),
                 );
@@ -312,6 +314,7 @@ class _HomePageState extends State<HomePage> {
                           builder: (ctx) => ListProduct(
                             name: "New Achives",
                             snapShot: newachives,
+                            isCategory: false,
                           ),
                         ),
                       );
@@ -454,13 +457,18 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     showSearch(
+          //       context: context,
+          //       delegate: Search(),
+          //     );
+          //   },
+          //   icon: Icon(
+          //     Icons.search,
+          //     color: Colors.black,
+          //   ),
+          // ),
           NotificationButton(),
         ],
       ),

@@ -1,33 +1,21 @@
 import 'package:e_commerce_app/model/product.dart';
+import 'package:e_commerce_app/provider/category_provider.dart';
+import 'package:e_commerce_app/provider/product_provider.dart';
+import 'package:e_commerce_app/screen/detailscreen.dart';
+import 'package:e_commerce_app/screen/search_product.dart';
+import 'package:e_commerce_app/screen/searchcategory.dart';
 import 'package:e_commerce_app/widgets/notification_button.dart';
 import 'package:e_commerce_app/widgets/singleproduct.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListProduct extends StatelessWidget {
-  // Widget _buildMyGridView() {
-  //   return Container(
-  //     height: 600,
-  //     child: StaggeredGridView.countBuilder(
-  //       itemCount: snapShot.data.docs.length,
-  //       scrollDirection: Axis.vertical,
-  //       itemBuilder: (context, index) => SingleProduct(
-  //         name: snapShot.data.docs[index]["name"],
-  //         price: snapShot.data.docs[index]["price"],
-  //         image: snapShot.data.docs[index]["image"],
-  //       ),
-  //       crossAxisCount: 2,
-  //       //staggeredTileBuilder: (i) => StaggeredTile.count(1, i.isEven ? 3 : 2),
-  //       staggeredTileBuilder: (index) => StaggeredTile.count(1, 2),
-  //       mainAxisSpacing: 5.0,
-  //       crossAxisSpacing: 5.0,
-  //     ),
-  //   );
-  // }
+  bool isCategory = true;
   final String name;
   final List<Product> snapShot;
-  ListProduct({this.name, this.snapShot});
+  ListProduct({this.name, this.snapShot, this.isCategory});
 
-  Widget _buildMyGridView() {
+  Widget _buildMyGridView(context) {
     return Container(
       height: 600,
       child: GridView.count(
@@ -36,10 +24,23 @@ class ListProduct extends StatelessWidget {
         scrollDirection: Axis.vertical,
         children: snapShot
             .map(
-              (e) => SingleProduct(
-                name: e.name,
-                price: e.price,
-                image: e.image,
+              (e) => GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (ctx) => DetailScreen(
+                        image: e.image,
+                        price: e.price,
+                        name: e.name,
+                      ),
+                    ),
+                  );
+                },
+                child: SingleProduct(
+                  name: e.name,
+                  price: e.price,
+                  image: e.image,
+                ),
               ),
             )
             .toList(),
@@ -49,17 +50,38 @@ class ListProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    //final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.search),
-            color: Colors.black,
-          ),
+          isCategory == true
+              ? IconButton(
+                  onPressed: () {
+                    categoryProvider.getSearchList(list: snapShot);
+                    showSearch(
+                      context: context,
+                      delegate: SearchCategory(),
+                    );
+                  },
+                  icon: Icon(Icons.search),
+                  color: Colors.black,
+                )
+              : IconButton(
+                  onPressed: () {
+                    productProvider.getSearchList(list: snapShot);
+                    showSearch(
+                      context: context,
+                      delegate: SearchProduct(),
+                    );
+                  },
+                  icon: Icon(Icons.search),
+                  color: Colors.black,
+                ),
           NotificationButton(),
         ],
       ),
@@ -88,7 +110,7 @@ class ListProduct extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            _buildMyGridView()
+            _buildMyGridView(context)
           ],
         ),
       ),

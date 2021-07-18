@@ -19,7 +19,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  ProductProvider productProvider;
+  //ProductProvider productProvider;
   // ignore: unused_field
   File _pickedImage;
   PickedFile _image;
@@ -30,37 +30,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userUid;
   String userImage;
   String imageUrl;
-
+  UserModel userModel;
   bool centerCircle = false;
   var imageMap;
-  void userDetailUpdate() async {
-    // setState(() {
-    //   centerCircle = true;
-    // });
-    // _pickedImage != null
-    //     ? imageMap =  _uploadImage(image: _pickedImage)
-    //     : Container();
+  TextEditingController userName = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController adress = TextEditingController();
 
-    FirebaseFirestore.instance.collection("User").doc(user.uid).update({
-      "UserName": userName.text,
-      "UserGender": isMale == true ? "Male" : "Female",
-      "Phone": phoneNumber.text,
-      "UserImage": imageUrl == null ? "" : imageUrl,
-      "Adress": adress.text
-    });
-    // setState(() {
-    //   centerCircle = false;
-    // });
-    setState(() {
-      edit = false;
-    });
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> getImage({ImageSource source}) async {
     _image = await ImagePicker().getImage(source: source);
 
     if (_image != null) {
-      _pickedImage = File(_image.path);
+      setState(() {
+        _pickedImage = File(_image.path);
+      });
     }
   }
 
@@ -76,11 +61,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //return imageUrl;
   }
 
-  TextEditingController userName = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController();
-  TextEditingController adress = TextEditingController();
+  void userDetailUpdate() async {
+    // setState(() {
+    //   centerCircle = true;
+    // });
+    // _pickedImage != null
+    //     ? imageMap =  _uploadImage(image: _pickedImage)
+    //     : Container();
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    FirebaseFirestore.instance.collection("User").doc(user.uid).update({
+      "UserName": userName.text,
+      "UserGender": isMale == true ? "Male" : "Female",
+      "Phone": phoneNumber.text,
+      "UserImage": imageUrl == null
+          ? "https://i.pinimg.com/originals/73/16/f5/7316f550de9ca0045e3d8d98a5bb5e44.png"
+          : imageUrl,
+      "Adress": adress.text
+    });
+    // setState(() {
+    //   centerCircle = false;
+    // });
+  }
 
   void validation() async {
     if (userName.text.isEmpty && phoneNumber.text.isEmpty) {
@@ -102,14 +103,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else {
-      print("tudo ok");
-      print(userName.text);
-      print(adress.text);
-      print(phoneNumber.text);
-      print(isMale);
-      print(imageUrl);
       // _uploadImage(image: _pickedImage);
       userDetailUpdate();
+      setState(() {
+        edit = false;
+      });
     }
   }
 
@@ -194,51 +192,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool edit = false;
 
   Widget _buildContainerPart() {
-    List<UserModel> userModel = productprovider.getUserModelList;
-    return Column(
-      children: userModel.map((e) {
-        userImage = e.userImage;
-        userName = TextEditingController(text: e.userName);
-        phoneNumber = TextEditingController(text: e.userPhoneNumber);
-        adress = TextEditingController(text: e.userAdress);
-        if (e.userGender == "Male") {
-          setState(() {
-            isMale = true;
-          });
-        } else {
-          setState(() {
-            isMale = false;
-          });
-        }
+    userName = TextEditingController(text: userModel.userName);
+    phoneNumber = TextEditingController(text: userModel.userPhoneNumber);
+    adress = TextEditingController(text: userModel.userAdress);
+    if (userModel.userGender == "Male") {
+      isMale = true;
+    } else {
+      isMale = false;
+    }
 
-        return Container(
-          height: 350,
-          child: Column(
-            children: [
-              _buildSingleContainer(
-                startText: "Name",
-                endText: e.userName,
-              ),
-              _buildSingleContainer(
-                startText: "Email",
-                endText: e.userEmail,
-              ),
-              _buildSingleContainer(
-                startText: "Gender",
-                endText: e.userGender,
-              ),
-              _buildSingleContainer(
-                startText: "Phone Number",
-                endText: e.userPhoneNumber,
-              ),
-              _buildSingleContainer(
-                startText: "Adress",
-                endText: e.userAdress,
-              ),
-            ],
+    return Container(
+      height: 350,
+      child: Column(
+        children: [
+          _buildSingleContainer(
+            startText: "Name",
+            endText: userModel.userName,
           ),
-        );
-      }).toList(),
+          _buildSingleContainer(
+            startText: "Email",
+            endText: userModel.userEmail,
+          ),
+          _buildSingleContainer(
+            startText: "Gender",
+            endText: userModel.userGender,
+          ),
+          _buildSingleContainer(
+            startText: "Phone Number",
+            endText: userModel.userPhoneNumber,
+          ),
+          _buildSingleContainer(
+            startText: "Adress",
+            endText: userModel.userAdress,
+          ),
+        ],
+      ),
     );
   }
 
@@ -276,53 +264,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildTextFormPart() {
-    List<UserModel> userModel = productprovider.getUserModelList;
-    return Column(
-      children: userModel.map((e) {
-        return Container(
-          height: 350,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              MyTextFormField(
-                name: "UserName",
-                controller: userName,
-              ),
-              _buildSingleContainer(
-                color: Colors.grey[300],
-                endText: e.userEmail,
-                startText: "Email",
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isMale = !isMale;
-                  });
-                },
-                child: _buildSingleContainer(
-                  color: Colors.white,
-                  endText: isMale == true ? "Male" : "Female",
-                  startText: "Gender",
-                ),
-              ),
-              MyTextFormField(
-                name: "Phone Number",
-                controller: phoneNumber,
-              ),
-              MyTextFormField(
-                name: "Adress",
-                controller: adress,
-              ),
-            ],
+    return Container(
+      height: 350,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          MyTextFormField(
+            name: "UserName",
+            controller: userName,
           ),
-        );
-      }).toList(),
+          _buildSingleContainer(
+            color: Colors.grey[300],
+            endText: userModel.userEmail,
+            startText: "Email",
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isMale = !isMale;
+              });
+            },
+            child: _buildSingleContainer(
+              color: Colors.white,
+              endText: isMale == true ? "Male" : "Female",
+              startText: "Gender",
+            ),
+          ),
+          MyTextFormField(
+            name: "Phone Number",
+            controller: phoneNumber,
+          ),
+          MyTextFormField(
+            name: "Adress",
+            controller: adress,
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    productProvider = Provider.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
@@ -378,89 +360,112 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
         ],
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("User").snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            var myDoc = snapshot.data.docs;
+            myDoc.forEach((checkDocs) {
+              if (checkDocs.data()["UserId"] == user.uid) {
+                userModel = UserModel(
+                  userEmail: checkDocs.data()["Email"],
+                  userGender: checkDocs.data()["UserGender"],
+                  userName: checkDocs.data()["UserName"],
+                  userPhoneNumber: checkDocs.data()["Phone"],
+                  userAdress: checkDocs.data()["Adress"],
+                  userImage: checkDocs.data()["UserImage"],
+                );
+              }
+            });
+            return Container(
+              height: double.infinity,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Stack(
                     children: [
-                      CircleAvatar(
-                        maxRadius: 65,
-                        backgroundImage: userImage == null
-                            ? NetworkImage(
-                                "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg")
-                            : NetworkImage(userImage),
+                      Container(
+                        height: 150,
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CircleAvatar(
+                              maxRadius: 65,
+                              backgroundImage: userModel.userImage == null
+                                  ? NetworkImage(
+                                      "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg")
+                                  : NetworkImage(userModel.userImage),
+                            ),
+                          ],
+                        ),
+                      ),
+                      edit == true
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 200, top: 100),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    myDialogBox();
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Color(0xff746bc9),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 350,
+                        child: edit == true
+                            ? _buildTextFormPart()
+                            : _buildContainerPart(),
+                      ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          width: 200,
+                          child: edit == false
+                              ? MyButton(
+                                  name: "Edit Profile",
+                                  onPressed: () {
+                                    setState(() {
+                                      edit = true;
+                                    });
+                                  },
+                                )
+                              : Container(),
+                        ),
                       ),
                     ],
                   ),
-                ),
-                edit == true
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 200, top: 100),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              myDialogBox();
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Color(0xff746bc9),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 350,
-                  child: edit == true
-                      ? _buildTextFormPart()
-                      : _buildContainerPart(),
-                ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    width: 200,
-                    child: edit == false
-                        ? MyButton(
-                            name: "Edit Profile",
-                            onPressed: () {
-                              setState(() {
-                                edit = true;
-                              });
-                            },
-                          )
-                        : Container(),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                ],
+              ),
+            );
+          }),
     );
   }
 }

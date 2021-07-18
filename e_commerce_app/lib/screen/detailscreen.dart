@@ -92,6 +92,53 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
+  List<bool> isSelected = [true, false, false, false];
+  List<bool> colored = [true, false, false, false];
+  int sizeIndex = 0;
+  String size;
+
+  void getSize() {
+    if (sizeIndex == 0) {
+      setState(() {
+        size = "S";
+      });
+    } else if (sizeIndex == 1) {
+      setState(() {
+        size = "M";
+      });
+    } else if (sizeIndex == 2) {
+      setState(() {
+        size = "M";
+      });
+    } else if (sizeIndex == 3) {
+      setState(() {
+        size = "XL";
+      });
+    }
+  }
+
+  int colorIndex = 0;
+  String color;
+  void getColor() {
+    if (colorIndex == 0) {
+      setState(() {
+        color = "Light Red";
+      });
+    } else if (colorIndex == 1) {
+      setState(() {
+        color = "Light Green";
+      });
+    } else if (colorIndex == 2) {
+      setState(() {
+        color = "Light Blue";
+      });
+    } else if (colorIndex == 3) {
+      setState(() {
+        color = "Light Yellow";
+      });
+    }
+  }
+
   Widget _buildSizePart() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,18 +150,45 @@ class _DetailScreenState extends State<DetailScreen> {
         SizedBox(
           height: 15,
         ),
+        // Container(
+        //   width: 265,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: [
+        //       SizeProduct(size: "S"),
+        //       SizeProduct(size: "M"),
+        //       SizeProduct(size: "L"),
+        //       SizeProduct(size: "XL"),
+        //     ],
+        //   ),
+        // ),
+
         Container(
           width: 265,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: ToggleButtons(
             children: [
-              SizeProduct(size: "S"),
-              SizeProduct(size: "M"),
-              SizeProduct(size: "L"),
-              SizeProduct(size: "XL"),
+              Text("S"),
+              Text("M"),
+              Text("L"),
+              Text("XL"),
             ],
+            onPressed: (int index) {
+              setState(() {
+                for (int i = 0; i < isSelected.length; i++) {
+                  if (i == index) {
+                    isSelected[i] = true;
+                  } else {
+                    isSelected[i] = false;
+                  }
+                }
+              });
+              setState(() {
+                sizeIndex = index;
+              });
+            },
+            isSelected: isSelected,
           ),
-        ),
+        )
       ],
     );
   }
@@ -133,18 +207,47 @@ class _DetailScreenState extends State<DetailScreen> {
         SizedBox(
           height: 15,
         ),
+        // Container(
+        //   width: 265,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: [
+        //       ColorProduct(color: Colors.red[200]),
+        //       ColorProduct(color: Colors.green[200]),
+        //       ColorProduct(color: Colors.blue[200]),
+        //       ColorProduct(color: Colors.yellow[200]),
+        //     ],
+        //   ),
+        // ),
+
         Container(
           width: 265,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: ToggleButtons(
+            borderColor: Color(0xff746bc9),
+            renderBorder: false,
             children: [
               ColorProduct(color: Colors.red[200]),
               ColorProduct(color: Colors.green[200]),
               ColorProduct(color: Colors.blue[200]),
               ColorProduct(color: Colors.yellow[200]),
             ],
+            onPressed: (int index) {
+              setState(() {
+                for (int i = 0; i < colored.length; i++) {
+                  if (i == index) {
+                    colored[i] = true;
+                  } else {
+                    colored[i] = false;
+                  }
+                }
+              });
+              setState(() {
+                colorIndex = index;
+              });
+            },
+            isSelected: colored,
           ),
-        ),
+        )
       ],
     );
   }
@@ -167,8 +270,7 @@ class _DetailScreenState extends State<DetailScreen> {
           height: 40,
           width: 140,
           decoration: BoxDecoration(
-            color: Colors.blue[200],
-            borderRadius: BorderRadius.circular(20),
+            color: Color(0xff746bc9),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -181,16 +283,28 @@ class _DetailScreenState extends State<DetailScreen> {
                     }
                   });
                 },
-                child: Icon(Icons.remove),
+                child: Icon(
+                  Icons.remove,
+                  color: Colors.white,
+                ),
               ),
-              Text(count.toString(), style: mystyle),
+              Text(
+                count.toString(),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   setState(() {
                     count++;
                   });
                 },
-                child: Icon(Icons.add),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -203,13 +317,17 @@ class _DetailScreenState extends State<DetailScreen> {
     return Container(
       height: 55,
       child: MyButton(
-        name: "CheckOut",
+        name: "Add to Cart",
         onPressed: () {
+          getSize();
+          getColor();
           productProvider.getCartData(
             image: widget.image,
             name: widget.name,
             price: widget.price,
             quantity: count,
+            color: color,
+            size: size,
           );
           Navigator.of(context).push(
             MaterialPageRoute(

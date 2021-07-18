@@ -28,7 +28,6 @@ class _CartScreenState extends State<CartScreen> {
         // ignore: deprecated_member_use
         child: RaisedButton(
           onPressed: () {
-            productProvider.addNotification("Notification");
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (ctx) => CheckOut()));
           },
@@ -69,6 +68,8 @@ class _CartScreenState extends State<CartScreen> {
         itemBuilder: (context, index) => CartSingleProduct(
           isCount: false,
           index: index,
+          color: productProvider.getCartModelList[index].color,
+          size: productProvider.getCartModelList[index].size,
           image: productProvider.getCartModelList[index].image,
           name: productProvider.getCartModelList[index].name,
           price: productProvider.getCartModelList[index].price,

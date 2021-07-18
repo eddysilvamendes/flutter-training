@@ -8,8 +8,8 @@ class ColorProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: 60,
+      height: 40,
+      width: 40,
       color: color,
     );
   }

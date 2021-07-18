@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "105195661372",
+    "project_id": "freeman-shoop",
+    "storage_bucket": "freeman-shoop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105195661372:android:159340ee1549212f3f7b39",
+        "android_client_info": {
+          "package_name": "com.example.my_second_ecomerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105195661372-3ka3kunc4hehe5g8r43u468aq6bu2bq1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.my_second_ecomerce_app",
+            "certificate_hash": "aac73aaaa1f72f923a72a11b4cd51f49c08e4a93"
+          }
+        },
+        {
+          "client_id": "105195661372-jo1kifo2rf4rq1chikfpu3vr4k4nmtii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVqezfqrynuRdOwAzonT0f3F7RdCmqlbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105195661372-jo1kifo2rf4rq1chikfpu3vr4k4nmtii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

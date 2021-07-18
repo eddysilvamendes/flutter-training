@@ -52,6 +52,9 @@ class _CheckOutState extends State<CheckOut> {
                           "Product Name": c.name,
                           "Product Price": c.price,
                           "Product Quantity": c.quantity,
+                          "Product Image": c.image,
+                          "Product Color": c.color,
+                          "Product Size": c.size,
                         })
                     .toList(),
                 "Product Total": total.toStringAsFixed(2),
@@ -61,7 +64,9 @@ class _CheckOutState extends State<CheckOut> {
                 "User Adress": e.userAdress,
                 "UserUid": user.uid,
               });
+
               productProvider.clearCheckOutProduct();
+              productProvider.addNotification("Notification");
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => HomePage(),
@@ -143,7 +148,7 @@ class _CheckOutState extends State<CheckOut> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              height: 160,
+              height: 500,
               child: ListView.builder(
                 itemCount: productProvider.getCheckOutModeListLength,
                 itemBuilder: (context, myIndex) {
@@ -151,6 +156,8 @@ class _CheckOutState extends State<CheckOut> {
                   return CartSingleProduct(
                     isCount: true,
                     index: myIndex,
+                    color: productProvider.getCheckOutModelList[myIndex].color,
+                    size: productProvider.getCheckOutModelList[myIndex].size,
                     image: productProvider.getCheckOutModelList[myIndex].image,
                     name: productProvider.getCheckOutModelList[myIndex].name,
                     price: productProvider.getCheckOutModelList[myIndex].price,

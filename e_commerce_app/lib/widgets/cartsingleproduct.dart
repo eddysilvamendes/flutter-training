@@ -10,14 +10,19 @@ class CartSingleProduct extends StatefulWidget {
   int quantity;
   bool isCount;
   final int index;
+  final String color;
+  final String size;
 
-  CartSingleProduct(
-      {this.image,
-      this.name,
-      this.price,
-      this.quantity,
-      this.isCount,
-      this.index});
+  CartSingleProduct({
+    this.image,
+    this.name,
+    this.price,
+    this.quantity,
+    this.isCount,
+    this.index,
+    this.color,
+    this.size,
+  });
 
   @override
   _CartSingleProductState createState() => _CartSingleProductState();
@@ -76,7 +81,22 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                             ],
                           ),
                         ),
-                        Text("Cloths"),
+                        Container(
+                          width: 160,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.color,
+                                style: mystyle,
+                              ),
+                              Text(
+                                widget.size,
+                                style: mystyle,
+                              ),
+                            ],
+                          ),
+                        ),
                         Text(
                           "\$ ${widget.price}",
                           style: TextStyle(
@@ -99,6 +119,8 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                                             productProvider.getCheckOutData(
                                                 quantity: widget.quantity,
                                                 image: widget.image,
+                                                color: widget.color,
+                                                size: widget.size,
                                                 name: widget.name,
                                                 price: widget.price);
                                           }
@@ -118,7 +140,9 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                                               quantity: widget.quantity,
                                               image: widget.image,
                                               name: widget.name,
-                                              price: widget.price);
+                                              price: widget.price,
+                                              color: widget.color,
+                                              size: widget.size);
                                         });
                                       },
                                       child: Icon(Icons.add),

@@ -46,14 +46,21 @@ class ProductProvider with ChangeNotifier {
   List<CartModel> checkOutModellList = [];
   CartModel checkOutModel;
 
-  void getCheckOutData(
-      {String name, String image, int quantity, double price}) {
+  void getCheckOutData({
+    String name,
+    String image,
+    int quantity,
+    double price,
+    String color,
+    String size,
+  }) {
     checkOutModel = CartModel(
-      name: name,
-      image: image,
-      price: price,
-      quantity: quantity,
-    );
+        name: name,
+        image: image,
+        price: price,
+        quantity: quantity,
+        color: color,
+        size: size);
     checkOutModellList.add(checkOutModel);
   }
 
@@ -85,13 +92,21 @@ class ProductProvider with ChangeNotifier {
   List<CartModel> cartModelList = [];
   CartModel cartModel;
 
-  void getCartData({String name, String image, int quantity, double price}) {
+  void getCartData({
+    String name,
+    String image,
+    int quantity,
+    double price,
+    String color,
+    String size,
+  }) {
     cartModel = CartModel(
-      name: name,
-      image: image,
-      price: price,
-      quantity: quantity,
-    );
+        name: name,
+        image: image,
+        price: price,
+        quantity: quantity,
+        color: color,
+        size: size);
     cartModelList.add(cartModel);
   }
 
@@ -216,5 +231,27 @@ class ProductProvider with ChangeNotifier {
 
   int get getNotificationIndex {
     return notificationList.length;
+  }
+
+  get getNotificationList {
+    return notificationList;
+  }
+
+  /*=============================================================================
+*****************************Search********************************************
+==============================================================================*/
+  List<Product> searchList;
+
+  void getSearchList({List<Product> list}) {
+    searchList = list;
+    notifyListeners();
+  }
+
+  List<Product> searchProductList(String query) {
+    List<Product> searchShirt = searchList.where((element) {
+      return element.name.toUpperCase().contains(query) ||
+          element.name.toLowerCase().contains(query);
+    }).toList();
+    return searchShirt;
   }
 }
