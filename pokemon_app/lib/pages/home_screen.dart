@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:pokemon_app/modules/pokemon.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -13,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final String url =
       "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
-  late List data;
+  List data =[];
 
   @override
   void initState() {
@@ -37,12 +39,12 @@ class _HomePageState extends State<HomePage> {
     return "Success";
   }
 
-  /*fetchData() async {
+  fetchData() async {
     var response = await http.get(Uri.parse(url));
     var decodedJson = jsonDecode(response.body);
     PokeHub pokeHub;
     pokeHub = PokeHub.fromJson(decodedJson);
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {

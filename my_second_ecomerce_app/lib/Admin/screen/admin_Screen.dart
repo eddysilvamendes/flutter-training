@@ -3,7 +3,7 @@ import 'package:my_second_ecomerce_app/Admin/screen/add_Product.dart';
 import 'package:my_second_ecomerce_app/Admin/widget/dialog.dart';
 import 'package:my_second_ecomerce_app/Admin/widget/menu.dart';
 import 'package:my_second_ecomerce_app/Admin/widget/menu_button.dart';
-import 'package:my_second_ecomerce_app/commons/commons.dart';
+import 'package:my_second_ecomerce_app/User/widgets/commons.dart';
 
 enum Page { dashboard, manage }
 
@@ -19,7 +19,6 @@ class _AdminState extends State<Admin> {
   TextEditingController categoryController = TextEditingController();
   TextEditingController brandController = TextEditingController();
   GlobalKey<FormState> _categoryFormKey = GlobalKey();
-  GlobalKey<FormState> _brandFormKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +120,6 @@ class _AdminState extends State<Admin> {
             ),
           ],
         );
-        break;
       case Page.manage:
         return ListView(
           children: <Widget>[
@@ -188,7 +186,6 @@ class _AdminState extends State<Admin> {
             Divider(),
           ],
         );
-        break;
       default:
         return Container();
     }

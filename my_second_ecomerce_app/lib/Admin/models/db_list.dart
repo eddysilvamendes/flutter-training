@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart';
-import 'dart:convert';
 
 class DBList {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
