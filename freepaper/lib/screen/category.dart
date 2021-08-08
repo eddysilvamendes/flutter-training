@@ -19,6 +19,7 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   List<PhotosModel> photos = [];
   TextEditingController searchController = TextEditingController();
+
   getsearchWallpaper() async {
     String url =
         "https://api.pexels.com/v1/search?query=${widget.categorieName}&per_page=80&page=1";
@@ -44,17 +45,20 @@ class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
       appBar: AppBar(
-        title: brandName(),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
             children: [
-              Text(widget.categorieName.toUpperCase()),
-              Divider(),
+              Text(
+                widget.categorieName.toUpperCase(),
+                style: TextStyle(color: white),
+              ),
+              Divider(
+                color: white,
+              ),
               photosList(photos, context),
             ],
           ),

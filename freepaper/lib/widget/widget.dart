@@ -4,19 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freepaper/model/photo_model.dart';
-import 'package:freepaper/screen/full_scree.dart';
+import 'package:freepaper/screen/full_screen.dart';
 import 'package:freepaper/widget/custom.dart';
 
 Widget photosList(List<PhotosModel> photos, context) {
   return Container(
+
     child: GridView.count(
+
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
-        crossAxisCount: 2,
+        crossAxisCount: 3,
         childAspectRatio: 0.6,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        mainAxisSpacing: 6.0,
-        crossAxisSpacing: 6.0,
+        //padding: EdgeInsets.symmetric(horizontal: 16),
+        mainAxisSpacing: 0.0,
+        crossAxisSpacing: 0.0,
         children: photos.map((e) {
           return GridTile(
             child: InkWell(
@@ -30,7 +32,7 @@ Widget photosList(List<PhotosModel> photos, context) {
                 tag: e.src.portrait,
                 child: Container(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16.0),
+                    //borderRadius: BorderRadius.circular(16.0),
                     child: kIsWeb
                         ? Image.network(
                       e.src.portrait,
@@ -52,6 +54,8 @@ Widget photosList(List<PhotosModel> photos, context) {
         }).toList()),
   );
 }
+
+
 
 Widget myButton(BuildContext context, String name, VoidCallback ontap){
   return Padding(

@@ -15,29 +15,17 @@ Color custongrey = Color(0xfff5f8fd);
 MaterialColor materialRed = Colors.red;
 MaterialColor materialGrey = Colors.grey;
 
+
+const kPrimaryColor = Color(0xff264653);
+const kSecondaryColor = Color(0xFFFE9901);
+const kContentColorLightTheme = Color(0xFFF5FCF9);
+const kContentColorDarkTheme = Color(0xFF1D1D35);
+const kWarninngColor = Color(0xFFF3BB1C);
+const kErrorColor = Color(0xFFF03738);
+
 void pushScreen(BuildContext context, Widget widget) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 }
 
-// void pushScreenReplacement(BuildContext context, Widget widget) {
-//   Navigator.pushReplacement(
-//       context, MaterialPageRoute(builder: (context) => widget));
-// }
 
-Widget brandName() {
-  return RichText(
-    text: TextSpan(
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-      children: <TextSpan>[
-        TextSpan(
-          text: "Wallpaper",
-          style: TextStyle(color: black),
-        ),
-        TextSpan(
-          text: "Hub",
-          style: TextStyle(color: blue),
-        ),
-      ],
-    ),
-  );
-}
+

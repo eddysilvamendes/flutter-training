@@ -65,5 +65,79 @@ List<CategoryModel> getCategories() {
   categories.add(categorieModel);
   categorieModel = new CategoryModel();
 
+  //1
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/4065880/pexels-photo-4065880.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+  categorieModel.categorieName = "Love";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //2
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/5894435/pexels-photo-5894435.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+  categorieModel.categorieName = "Soccer";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //3
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/707582/pexels-photo-707582.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+  categorieModel.categorieName = "Time";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //4
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/21696/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+  categorieModel.categorieName = "Motivational";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //5
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/90319/pexels-photo-90319.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+  categorieModel.categorieName = "Bedroom";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //6
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/3031754/pexels-photo-3031754.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
+  categorieModel.categorieName = "Black";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //7
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/2581922/pexels-photo-2581922.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+  categorieModel.categorieName = "House";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //8
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/4503267/pexels-photo-4503267.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
+  categorieModel.categorieName = "Gardening";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //9
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
+  categorieModel.categorieName = "Desktop";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+  //6
+  categorieModel.imgUrl =
+  "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+  categorieModel.categorieName = "Landscape";
+  categories.add(categorieModel);
+  categorieModel = new CategoryModel();
+
+
+
   return categories;
+
 }
+

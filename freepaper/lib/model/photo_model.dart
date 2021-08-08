@@ -33,12 +33,9 @@ class SrcModel {
     required this.portrait,
     required this.small,
   });
+
   factory SrcModel.fromMap(Map<String, dynamic> srcJson) {
     return SrcModel(
-        // portrait: srcJson["portrait"],
-        // large: srcJson["large"],
-        // landscape: srcJson["landscape"],
-        // medium: srcJson["medium"]);
         portrait: srcJson["portrait"],
         original: srcJson["original"],
         small: srcJson["small"]);

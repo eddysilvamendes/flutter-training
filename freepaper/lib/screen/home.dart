@@ -6,7 +6,7 @@ import 'package:freepaper/data/data.dart';
 import 'package:freepaper/model/categoryModel.dart';
 import 'package:freepaper/model/photo_model.dart';
 import 'package:freepaper/screen/search.dart';
-import 'package:freepaper/widget/categorieListTile.dart';
+import 'package:freepaper/widget/categorycard.dart';
 import 'package:freepaper/widget/custom.dart';
 import 'package:freepaper/widget/loading.dart';
 import 'package:freepaper/widget/search.dart';
@@ -22,12 +22,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<CategoryModel> categories = [];
   List<PhotosModel> photos = [];
   TextEditingController searchController = TextEditingController();
 
   getTrendingWallpaper() async {
-    String url = "https://api.pexels.com/v1/curated?per_page=30&page=1 ";
+    String url = "https://api.pexels.com/v1/curated?per_page=51&page=1 ";
     await http
         .get(Uri.parse(url), headers: {"Authorization": apiKey}).then((value) {
       Map<String, dynamic> jsonData = jsonDecode(value.body);
@@ -44,9 +43,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getTrendingWallpaper();
-    categories = getCategories();
     super.initState();
   }
+
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -58,45 +57,29 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
       appBar: AppBar(
-        title: brandName(),
+        title: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            children: <TextSpan>[
+              TextSpan(
+                text: "Free",
+              ),
+              TextSpan(
+                text: "Paper",
+                style: TextStyle(color: blue),
+              ),
+            ],
+          ),
+        ),
         elevation: 0.0,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
             children: [
-              SearchWidget(
-                name: "Search",
-                controller: searchController,
-                ontap: () {
-                  pushScreen(
-                    context,
-                    Search(
-                      search: searchController.text,
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Container(
-                height: 80,
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  itemCount: categories.length,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return CategorieListTile(
-                      imgUrl: categories[index].imgUrl,
-                      title: categories[index].categorieName,
-                    );
-                  },
-                ),
-              ),
               photos.isEmpty ? Loading() : photosList(photos, context),
               SizedBox(
                 height: 24,
@@ -117,12 +100,12 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Container(
                         child: Text(
-                          "Pexels",
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 12,
-                              fontFamily: 'Overpass'),
-                        )),
+                      "Pexels",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 12,
+                          fontFamily: 'Overpass'),
+                    )),
                   )
                 ],
               ),
