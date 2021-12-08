@@ -15,7 +15,7 @@ class News{
     var jsonData = jsonDecode(response.body);
     if(jsonData["status"]=="ok"){
       jsonData["articles"].forEach((e){
-        if(e["urlToImage"] != null && e["description"] != null && e["author"] != null){
+        if(e["urlToImage"] != null && e["description"] != null && e["author"] != null && e["content"] != null){
           ArticleModel articleModel = ArticleModel(
               title: e["title"],
               description: e["description"],

@@ -44,6 +44,9 @@ dependencies:
   sqflite: ^2.0.0+3
   intl: ^0.17.0
   flutter_staggered_grid_view: ^0.4.0
+  infinite_scroll_pagination: ^3.1.0
+  connectivity: ^3.0.6
+  overlay_support: ^1.2.1
 
 
 dev_dependencies:

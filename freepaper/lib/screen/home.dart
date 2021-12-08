@@ -1,6 +1,8 @@
 // @dart=2.9
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:freepaper/data/data.dart';
 import 'package:freepaper/model/categoryModel.dart';
@@ -9,7 +11,6 @@ import 'package:freepaper/screen/search.dart';
 import 'package:freepaper/widget/categorycard.dart';
 import 'package:freepaper/widget/custom.dart';
 import 'package:freepaper/widget/loading.dart';
-import 'package:freepaper/widget/search.dart';
 import 'package:freepaper/widget/widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -25,8 +26,18 @@ class _HomePageState extends State<HomePage> {
   List<PhotosModel> photos = [];
   TextEditingController searchController = TextEditingController();
 
+  void showConnectivitySnackBar(ConnectivityResult result) {
+    final hasInternet = result != ConnectivityResult.none;
+    final message = hasInternet
+        ? 'You have again ${result.toString()}'
+        : 'Please Connect to internet';
+    final color = hasInternet ? Colors.green : Colors.red;
+
+    Utils.showTopSnackBar(context, message, color);
+  }
+
   getTrendingWallpaper() async {
-    String url = "https://api.pexels.com/v1/curated?per_page=51&page=1 ";
+    String url = "https://api.pexels.com/v1/curated?per_page=80&page=1 ";
     await http
         .get(Uri.parse(url), headers: {"Authorization": apiKey}).then((value) {
       Map<String, dynamic> jsonData = jsonDecode(value.body);
@@ -39,11 +50,20 @@ class _HomePageState extends State<HomePage> {
     });
     setState(() {});
   }
+  StreamSubscription subscription;
+
 
   @override
   void initState() {
+    subscription = Connectivity().onConnectivityChanged.listen((showConnectivitySnackBar));
+    
     getTrendingWallpaper();
     super.initState();
+  }
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   _launchURL(String url) async {

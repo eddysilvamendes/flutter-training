@@ -6,6 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:freepaper/model/photo_model.dart';
 import 'package:freepaper/screen/full_screen.dart';
 import 'package:freepaper/widget/custom.dart';
+import 'package:overlay_support/overlay_support.dart';
+
+class Utils {
+  static void showTopSnackBar(
+      BuildContext context,
+      String message,
+      Color color,
+      ) =>
+      showSimpleNotification(
+        Text('Internet Connectivity Update'),
+        subtitle: Text(message),
+        background: color,
+      );
+}
 
 Widget photosList(List<PhotosModel> photos, context) {
   return Container(

@@ -8,20 +8,22 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: SpinKitRing(
-              color: white,
-              size: MediaQuery.of(context).size.height/10,
+      child: Center(
+        child: Column(
+
+          children: [
+            Container(
+              child: SpinKitRing(
+                color: white,
+                size: MediaQuery.of(context).size.height/10,
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Text("Please wait", style: TextStyle(color: white, fontSize: 16, ),),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Text("Please wait", style: TextStyle(color: white, fontSize: 16, ),),
+            ),
+          ],
+        ),
       ),
     );
   }

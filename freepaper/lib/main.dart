@@ -1,5 +1,10 @@
 // @dart=2.9
+import 'dart:async';
+import 'dart:io';
+
 import 'package:animations/animations.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freepaper/screen/favorite.dart';
 import 'package:freepaper/screen/home.dart';
@@ -8,8 +13,16 @@ import 'package:freepaper/theme.dart';
 import 'package:freepaper/widget/categorycard.dart';
 import 'package:freepaper/widget/custom.dart';
 import 'package:freepaper/widget/search.dart';
+import 'package:freepaper/widget/widget.dart';
+import 'package:overlay_support/overlay_support.dart';
+void _enablePlatformOverrideForDesktop() {
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux)) {
+    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  }
+}
 
 void main() {
+  _enablePlatformOverrideForDesktop();
   runApp(MyApp());
 }
 
@@ -17,13 +30,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FreePaper',
-      debugShowCheckedModeBanner: false,
-      //theme: ThemeData(primaryColor: kPrimaryColor),
-      theme: lightThemeData(context),
-      darkTheme: darkThemeData(context),
-      home: MainScreen(),
+    return OverlaySupport(
+      child: MaterialApp(
+        title: 'FreePaper',
+        debugShowCheckedModeBanner: false,
+        //theme: ThemeData(primaryColor: kPrimaryColor),
+        theme: lightThemeData(context),
+        darkTheme: darkThemeData(context),
+        home:
+        MainScreen(),
+      ),
     );
   }
 }
@@ -36,6 +52,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   TextEditingController searchController = TextEditingController();
   int _selectedIndex = 0;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +131,7 @@ class _MainScreenState extends State<MainScreen> {
       ],
     );
   }
+
 }
 
 // class MainScreen extends StatelessWidget {
