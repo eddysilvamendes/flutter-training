@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/task_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/task_mode.dart';
 import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/widgets/app_bar.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/input_field.dart';
 import 'package:get/get.dart';
@@ -32,7 +33,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
-      appBar: _appBar(context),
+      appBar: buildAppBar(context),
       body: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         child: SingleChildScrollView(
@@ -178,32 +179,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  _appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: context.theme.backgroundColor,
-      elevation: 0,
-      leading: GestureDetector(
-        onTap: () {
-          Get.back();
-        },
-        child: Icon(
-          Icons.arrow_back_rounded,
-          size: 20,
-          color: Get.isDarkMode ? Colors.white : Colors.black,
-        ),
-      ),
-      // ignore: prefer_const_literals_to_create_immutables
-      actions: [
-        CircleAvatar(
-          backgroundImage: AssetImage(
-            "images/freeman.png",
-          ),
-        ),
-        SizedBox(width: 15)
-      ],
     );
   }
 

@@ -9,6 +9,10 @@ const Color whiteClr = Color(0xFFFFFFFF);
 const Color primaryClr = bluishClr;
 const Color darkGreyClr = Color(0xFF121212);
 const Color darkHeaderClr = Color(0xFF424242);
+const Color facebookColor = Color(0xff39579A);
+const Color twitterColor = Color(0xff00ABEA);
+const Color instaColor = Color(0xffBE2289);
+const Color googleColor = Color(0xffDF4A32);
 
 class Themes {
   static final light = ThemeData(

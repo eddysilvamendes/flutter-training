@@ -43,6 +43,13 @@ dependencies:
   date_picker_timeline: 
   sqflite: 
   flutter_staggered_animations: 
+  introduction_screen:
+  flutter_signin_button: 
+  font_awesome_flutter: 
+  fluttertoast:
+  google_sign_in: 
+  image_picker: 
+  flutter_settings_screens: 
 
 dev_dependencies:
   flutter_test:

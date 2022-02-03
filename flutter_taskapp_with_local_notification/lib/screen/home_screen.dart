@@ -4,9 +4,12 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/task_controller.dart';
+import 'package:flutter_taskapp_with_local_notification/controller/user_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/task_mode.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/add_profile_info.dart';
 import 'package:flutter_taskapp_with_local_notification/screen/add_task_screen.dart';
 import 'package:flutter_taskapp_with_local_notification/screen/edit_task.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/profile_screen.dart';
 import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/services/nitification_services.dart';
 import 'package:flutter_taskapp_with_local_notification/services/theme_service.dart';
@@ -14,10 +17,15 @@ import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/task_tile.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  //final GoogleSignInAccount user;
+  const HomeScreen({
+    Key? key,
+    /*required this.user*/
+  }) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -28,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var notifyHelper;
   DateTime _selectedDate = DateTime.now();
   final _taskController = Get.put(TaskController());
+  final _userController = Get.put(UserController());
 
   @override
   void initState() {
@@ -76,9 +85,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       actions: [
-        CircleAvatar(
-          backgroundImage: AssetImage(
-            "images/freeman.png",
+        GestureDetector(
+          onTap: () {
+            _pickScreen();
+            //Get.to(() => ProfileScreen());
+          },
+          child: CircleAvatar(
+            backgroundImage: AssetImage("images/freeman.png"),
+            /* NetworkImage(
+              widget.user.photoUrl!,
+            ),*/
           ),
         ),
         SizedBox(width: 15)
@@ -167,14 +183,16 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: _taskController.taskList.length,
           itemBuilder: (_, index) {
             Task task = _taskController.taskList[index];
-            print(task.toJson());
+
             if (task.repeat == "Daily") {
               DateTime date = DateFormat.jm().parse(task.startTime.toString());
               var myTime = DateFormat("HH:mm").format(date);
-              notifyHelper.scheduledNotification(
-                  int.parse(myTime.toString().split(":")[0]),
-                  int.parse(myTime.toString().split(":")[1]),
-                  task);
+              task.isCompleted == 1
+                  ? Container()
+                  : notifyHelper.scheduledNotification(
+                      int.parse(myTime.toString().split(":")[0]),
+                      int.parse(myTime.toString().split(":")[1]),
+                      task);
               return AnimationConfiguration.staggeredList(
                 position: index,
                 child: SlideAnimation(
@@ -334,5 +352,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void _pickScreen() {
+    if (_userController.userList.isEmpty) {
+      Get.to(() => AddProfileScreen());
+    } else if (_userController.userList.isNotEmpty) {
+      Get.to(() => ProfileScreen());
+    }
   }
 }
