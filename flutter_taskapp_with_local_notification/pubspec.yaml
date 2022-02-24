@@ -46,14 +46,22 @@ dependencies:
   introduction_screen:
   flutter_signin_button: 
   font_awesome_flutter: 
-  fluttertoast:
   google_sign_in: 
   image_picker: 
-  flutter_settings_screens: 
+ 
+  flutter_launcher_icons: 
+  country_state_city_pro: 
+  language_picker: ^0.4.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  image_path: "images/logo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "images/logo_foreground.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

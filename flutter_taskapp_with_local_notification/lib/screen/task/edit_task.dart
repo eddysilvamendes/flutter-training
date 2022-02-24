@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/task_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/task_mode.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/input_field.dart';
 import 'package:get/get.dart';

@@ -4,20 +4,23 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/task_controller.dart';
-import 'package:flutter_taskapp_with_local_notification/controller/user_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/task_mode.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/add_profile_info.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/add_task_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/edit_task.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/profile_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+
+import 'package:flutter_taskapp_with_local_notification/screen/profile/add_profile_info.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/settings/new_setting.dart';
+// ignore: import_of_legacy_library_into_null_safe
+
+import 'package:flutter_taskapp_with_local_notification/screen/task/add_task_screen.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/task/edit_task.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/services/nitification_services.dart';
 import 'package:flutter_taskapp_with_local_notification/services/theme_service.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/data/menu_items.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/menu_items.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/task_tile.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var notifyHelper;
   DateTime _selectedDate = DateTime.now();
   final _taskController = Get.put(TaskController());
-  final _userController = Get.put(UserController());
 
   @override
   void initState() {
@@ -85,19 +87,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       actions: [
-        GestureDetector(
-          onTap: () {
-            _pickScreen();
-            //Get.to(() => ProfileScreen());
-          },
-          child: CircleAvatar(
-            backgroundImage: AssetImage("images/freeman.png"),
-            /* NetworkImage(
-              widget.user.photoUrl!,
-            ),*/
+        PopupMenuButton<MenuItem>(
+          onSelected: (item) => onSelected(context, item),
+          icon: Icon(
+            Icons.more_vert,
+            color: Get.isDarkMode ? Colors.white : Colors.black,
           ),
+          itemBuilder: (context) => [
+            ...MenuItems.items1.map(buildItem).toList(),
+            PopupMenuDivider(),
+            ...MenuItems.items2.map(buildItem).toList(),
+          ],
         ),
-        SizedBox(width: 15)
       ],
     );
   }
@@ -184,14 +185,17 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (_, index) {
             Task task = _taskController.taskList[index];
 
-            if (task.repeat == "Daily") {
+            if (task.repeat == "Daily" || task.date == task.date) {
               DateTime date = DateFormat.jm().parse(task.startTime.toString());
               var myTime = DateFormat("HH:mm").format(date);
+              var myDate = task.date;
+
               task.isCompleted == 1
                   ? Container()
                   : notifyHelper.scheduledNotification(
                       int.parse(myTime.toString().split(":")[0]),
                       int.parse(myTime.toString().split(":")[1]),
+                      int.parse(myDate.toString().split("/")[1]),
                       task);
               return AnimationConfiguration.staggeredList(
                 position: index,
@@ -354,11 +358,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _pickScreen() {
-    if (_userController.userList.isEmpty) {
-      Get.to(() => AddProfileScreen());
-    } else if (_userController.userList.isNotEmpty) {
-      Get.to(() => ProfileScreen());
+  PopupMenuItem<MenuItem> buildItem(MenuItem item) => PopupMenuItem<MenuItem>(
+        value: item,
+        child: Row(
+          children: [
+            Icon(
+              item.icon,
+              size: 20,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
+            ),
+            SizedBox(width: 12),
+            Text(item.text),
+          ],
+        ),
+      );
+
+  onSelected(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.itemSetting:
+        Get.to(() => NewSettingScreen());
+        break;
+      case MenuItems.itemProfile:
+        Get.to(() => AddProfileScreen());
+        break;
     }
   }
 }

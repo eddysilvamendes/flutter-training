@@ -18,13 +18,5 @@ AppBar buildAppBar(BuildContext context) {
       ),
     ),
     // ignore: prefer_const_literals_to_create_immutables
-    actions: [
-      CircleAvatar(
-        backgroundImage: AssetImage(
-          "images/freeman.png",
-        ),
-      ),
-      SizedBox(width: 15)
-    ],
   );
 }

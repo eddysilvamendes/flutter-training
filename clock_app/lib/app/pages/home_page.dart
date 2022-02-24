@@ -4,6 +4,8 @@ import 'package:clock_app/app/model/menu_info.dart';
 import 'package:clock_app/app/pages/alarm_page.dart';
 import 'package:clock_app/app/pages/clock_page.dart';
 import 'package:clock_app/app/pages/clock_view.dart';
+import 'package:clock_app/app/pages/stopwatch_page.dart';
+import 'package:clock_app/app/pages/timer_page.dart';
 import 'package:clock_app/app/utils/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -44,27 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 else if (value.menuType == MenuType.alarm)
                   return AlarmPage();
                 else if (value.menuType == MenuType.timer)
-                  return Container(
-                    child: Text(
-                      "Timer",
-                      style: TextStyle(
-                          fontFamily: "avenir",
-                          fontWeight: FontWeight.w300,
-                          color: Colors.white,
-                          fontSize: 24),
-                    ),
-                  );
+                  return TimerPage();
                 else if (value.menuType == MenuType.stopwatch)
-                  return Container(
-                    child: Text(
-                      "StopWatch",
-                      style: TextStyle(
-                          fontFamily: "avenir",
-                          fontWeight: FontWeight.w300,
-                          color: Colors.white,
-                          fontSize: 24),
-                    ),
-                  );
+                  return StopWatchPage();
                 else
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 64),

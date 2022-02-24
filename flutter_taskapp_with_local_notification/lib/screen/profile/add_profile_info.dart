@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/user_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/user_model.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/profile_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/profile/profile_screen.dart';
+
+import 'package:flutter_taskapp_with_local_notification/utils/utility.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/app_bar.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/input_field.dart';
@@ -24,26 +23,21 @@ class AddProfileScreen extends StatefulWidget {
 }
 
 class _AddProfileScreenState extends State<AddProfileScreen> {
-  late File _pickedImage;
-  XFile? _image;
   final ImagePicker _picker = ImagePicker();
 
   UserController userController = Get.put(UserController());
 
-  TextEditingController _username = TextEditingController();
-  TextEditingController _email = TextEditingController();
-  TextEditingController _about = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _about = TextEditingController();
+  String imgString = '';
 
-  //TODO: fix this part
+  //TODO: convert img to strong
 
   Future<void> getImage({required ImageSource source}) async {
-    _image = (await _picker.pickImage(source: source));
-
-    if (_image != null) {
-      setState(() {
-        _pickedImage = File(_image!.path);
-      });
-    }
+    await _picker.pickImage(source: source).then((value) async {
+      imgString = Utility.base64String(await value!.readAsBytes());
+    });
   }
 
   Future<void> myDialogBox() {
@@ -89,7 +83,8 @@ class _AddProfileScreenState extends State<AddProfileScreen> {
         physics: BouncingScrollPhysics(),
         children: [
           ProfileWidget(
-            imgPath: "images/freeman.png",
+            imgPath:
+                "https://www.shareicon.net/data/128x128/2016/09/15/829466_man_512x512.png",
             isEdit: true,
             onTap: () async {
               myDialogBox();
@@ -116,6 +111,7 @@ class _AddProfileScreenState extends State<AddProfileScreen> {
           MyButton(
               onTap: () {
                 _saveData();
+                print(imgString);
               },
               label: "Save")
         ],
@@ -126,11 +122,13 @@ class _AddProfileScreenState extends State<AddProfileScreen> {
   void _saveData() async {
     print("Ener Save");
     await userController.addUser(
-        user: User(
-      username: _username.text,
-      about: _about.text,
-      email: _email.text,
-    ));
+      user: User(
+        username: _username.text,
+        about: _about.text,
+        email: _email.text,
+        imgPath: imgString,
+      ),
+    );
     Get.off(() => ProfileScreen());
     userController.getUser();
     Get.snackbar(

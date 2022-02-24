@@ -50,7 +50,7 @@ class ProfileWidget extends StatelessWidget {
       );
 
   _buildImage() {
-    final image = AssetImage(imgPath);
+    final image = NetworkImage(imgPath);
     return ClipOval(
       child: Material(
         color: Colors.transparent,

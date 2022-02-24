@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_taskapp_with_local_notification/db/db_helper.dart';
 import 'package:flutter_taskapp_with_local_notification/screen/home_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+
+import 'package:flutter_taskapp_with_local_notification/screen/splash_screen.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/services/theme_service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,7 +15,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initDb();
   await GetStorage.init();
-  runApp(const MyApp());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

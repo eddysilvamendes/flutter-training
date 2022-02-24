@@ -63,12 +63,12 @@ class NotifyHelper {
     );
   }
 
-  scheduledNotification(int hour, int minute, Task task) async {
+  scheduledNotification(int hour, int minute, int day, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         task.id!.toInt(),
         task.title,
         task.note,
-        _convertTime(hour, minute),
+        _convertTime(hour, minute, day),
 
         // tz.TZDateTime.now(tz.local).add(const Duration(seconds: minute), ),
         const NotificationDetails(
@@ -79,7 +79,7 @@ class NotifyHelper {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time,
+        matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
         payload: "${task.title}|" +
             "${task.note}|" +
             "${task.color}|" +
@@ -88,10 +88,10 @@ class NotifyHelper {
             "${task.endTime}|");
   }
 
-  tz.TZDateTime _convertTime(int hour, int minute) {
+  tz.TZDateTime _convertTime(int hour, int minute, int day) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime sheduleDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    tz.TZDateTime sheduleDate = tz.TZDateTime(
+        tz.local, now.year, now.month, now.day, hour, minute, day);
     if (sheduleDate.isBefore(now)) {
       sheduleDate = sheduleDate.add(Duration(days: 1));
     }

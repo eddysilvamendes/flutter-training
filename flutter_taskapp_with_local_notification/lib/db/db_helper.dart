@@ -37,7 +37,7 @@ class DBHelper {
     await db.execute("CREATE TABLE $_tableUser("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "username STRING ,"
-        "email STRING , about TEXT )");
+        "email STRING , about TEXT , imgPath TEXT)");
   }
 
   //=======================TASK==============================================
@@ -98,14 +98,10 @@ class DBHelper {
         .delete(_tableUser, where: "id=?", whereArgs: [user.id]);
   }
 
-  static Future<int> updateUser(
-    int id,
-    String username,
-    String email,
-    String about,
-  ) async {
+  static Future<int> updateUser(int id, String username, String email,
+      String about, String imgPath) async {
     return await _database!.rawUpdate(
-      'UPDATE $_tableUser SET username = \'$username\', email = \'$email\',about = \'$about\' WHERE id = $id',
+      'UPDATE $_tableUser SET username = \'$username\', email = \'$email\',about = \'$about\', imgPath = \'$imgPath\' WHERE id = $id',
     );
   }
 }

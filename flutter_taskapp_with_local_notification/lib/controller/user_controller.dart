@@ -27,7 +27,8 @@ class UserController extends GetxController {
     getUser();
   }
 
-  void updateUsers(int id, String username, String email, String about) async {
-    await DBHelper.updateUser(id, username, email, about);
+  void updateUsers(int id, String username, String email, String about,
+      String imgPath) async {
+    await DBHelper.updateUser(id, username, email, about, imgPath);
   }
 }

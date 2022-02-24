@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/screen/home_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/login_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -37,7 +36,7 @@ class SplashScreen extends StatelessWidget {
             footer: MyButton(
               label: "Start Task",
               onTap: () {
-                Get.off(LoginScreen());
+                Get.off(() => HomeScreen());
               },
             ),
             image: buildImage("images/task8.png"),
@@ -57,7 +56,7 @@ class SplashScreen extends StatelessWidget {
         dotsDecorator: getDotDecoration(),
         globalBackgroundColor: Theme.of(context).backgroundColor,
         onDone: () {
-          Get.off(LoginScreen());
+          Get.off(() => HomeScreen());
         },
       ),
     );
@@ -68,7 +67,10 @@ class SplashScreen extends StatelessWidget {
 
   PageDecoration getPageDecoration() => PageDecoration(
         titleTextStyle: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-        bodyTextStyle: TextStyle(fontSize: 20),
+        bodyTextStyle: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+        ),
         descriptionPadding: EdgeInsets.all(16).copyWith(bottom: 0),
         imagePadding: EdgeInsets.all(24),
         pageColor: Colors.white,

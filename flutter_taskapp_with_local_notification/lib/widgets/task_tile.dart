@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/models/task_mode.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TaskTile extends StatelessWidget {
@@ -78,7 +78,6 @@ class TaskTile extends StatelessWidget {
             child: Text(
               task!.isCompleted == 1 ? "COMPLETED" : "TODO",
               style: GoogleFonts.lato(
-                // ignore: prefer_const_constructors
                 textStyle: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,

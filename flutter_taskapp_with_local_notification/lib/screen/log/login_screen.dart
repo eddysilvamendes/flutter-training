@@ -1,14 +1,12 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_taskapp_with_local_notification/api/google_sign_in_api.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/home_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/signUp_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/log/signUp_screen.dart';
+
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/social_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

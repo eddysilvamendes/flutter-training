@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/task_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/task_mode.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/app_bar.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/input_field.dart';
@@ -313,7 +313,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   void _addTaskToDB() async {
-    int value = await _taskController.addTask(
+    await _taskController.addTask(
       task: Task(
         note: _noteController.text,
         title: _titleController.text,

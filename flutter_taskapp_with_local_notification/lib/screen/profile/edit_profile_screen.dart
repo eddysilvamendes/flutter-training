@@ -1,15 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/user_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/user_model.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/utility.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/app_bar.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/input_field.dart';
-import 'package:flutter_taskapp_with_local_notification/widgets/profile.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,8 +19,6 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  late File _pickedImage;
-  XFile? _image;
   final ImagePicker _picker = ImagePicker();
 
   UserController userController = Get.put(UserController());
@@ -31,17 +26,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController _username = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _about = TextEditingController();
+  String imgString = '';
 
   //TODO: fix this part
 
   Future<void> getImage({required ImageSource source}) async {
-    _image = (await _picker.pickImage(source: source));
-
-    if (_image != null) {
-      setState(() {
-        _pickedImage = File(_image!.path);
-      });
-    }
+    await _picker.pickImage(source: source).then((value) async {
+      imgString = Utility.base64String(await value!.readAsBytes());
+    });
   }
 
   Future<void> myDialogBox() {
@@ -102,13 +94,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.symmetric(horizontal: 32),
         physics: BouncingScrollPhysics(),
         children: [
-          ProfileWidget(
-            imgPath: "images/freeman.png",
+          Utility.imageFromBase64String(widget.user.imgPath!, () async {
+            myDialogBox();
+          }, true),
+          /* ProfileWidget(
+            imgPath: widget.user.imgPath!,
             isEdit: true,
             onTap: () async {
               myDialogBox();
             },
-          ),
+          ),*/
           SizedBox(height: 24),
           MyInputField(
             title: "Full Name",
@@ -145,7 +140,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _updateData() {
     userController.updateUsers(
-        widget.user.id!, _username.text, _email.text, _about.text);
+        widget.user.id!, _username.text, _email.text, _about.text, imgString);
     Get.back();
     userController.getUser();
     Get.snackbar(

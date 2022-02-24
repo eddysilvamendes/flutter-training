@@ -3,11 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taskapp_with_local_notification/controller/user_controller.dart';
 import 'package:flutter_taskapp_with_local_notification/models/user_model.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/edit_profile_screen.dart';
-import 'package:flutter_taskapp_with_local_notification/screen/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/log/login_screen.dart';
+import 'package:flutter_taskapp_with_local_notification/screen/profile/edit_profile_screen.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/theme.dart';
+import 'package:flutter_taskapp_with_local_notification/utils/utility.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/app_bar.dart';
 import 'package:flutter_taskapp_with_local_notification/widgets/button.dart';
-import 'package:flutter_taskapp_with_local_notification/widgets/profile.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -39,20 +40,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProfileWidget(
-                      imgPath: "images/freeman.png",
+                    /*ProfileWidget(
+                      imgPath: _userController.userList[index].imgPath!,
                       isEdit: false,
                       onTap: () async {
                         await Get.to(EditProfileScreen(
                             user: _userController.userList[index]));
                         _userController.getUser();
                       },
-                    ),
+                    ),*/
+                    Utility.imageFromBase64String(
+                        _userController.userList[index].imgPath!, () async {
+                      await Get.to(() => EditProfileScreen(
+                          user: _userController.userList[index]));
+                      _userController.getUser();
+                    }, true),
                     SizedBox(height: 24),
                     _buildName(_userController.userList[index]),
                     SizedBox(height: 24),
                     Center(
-                        child: MyButton(onTap: () {}, label: "Upgrade To Pro")),
+                        child: MyButton(
+                            onTap: () {
+                              Get.to(() => LoginScreen());
+                            },
+                            label: "Upgrade To Pro")),
                     SizedBox(height: 24),
                     _buildNumber(),
                     SizedBox(height: 24),

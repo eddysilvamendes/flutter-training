@@ -3,12 +3,14 @@ class User {
   String? username;
   String? email;
   String? about;
+  String? imgPath;
 
   User({
     this.id,
     this.username,
     this.about,
     this.email,
+    this.imgPath,
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -16,6 +18,7 @@ class User {
     username = json["username"];
     email = json["email"];
     about = json["about"];
+    imgPath = json["imgPath"];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,6 +28,7 @@ class User {
     userdata["username"] = username;
     userdata["email"] = email;
     userdata["about"] = about;
+    userdata["imgPath"] = imgPath;
 
     return userdata;
   }
