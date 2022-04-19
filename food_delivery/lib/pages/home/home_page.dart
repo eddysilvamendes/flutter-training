@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/pages/account/account_page.dart';
+import 'package:food_delivery/pages/auth/sign_up_page.dart';
 import 'package:food_delivery/pages/cart/cart_history.dart';
 import 'package:food_delivery/pages/cart/cart_page.dart';
 import 'package:food_delivery/pages/home/main_food_page.dart';
@@ -20,6 +22,9 @@ class _HomePageState extends State<HomePage> {
 
   List pages = [
     MainFoodPage(),
+    Container(
+      child: Center(child: Text("Category Page")),
+    ),
     Container(
       child: Center(child: Text("Next page")),
     ),
@@ -46,12 +51,14 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      MainFoodPage(),
+      Container(
+        child: Center(child: Text("Main Page")),
+      ),
+      //MainFoodPage(),
+      SignUpScreen(),
       CartHistory(),
       CartPage(),
-      Container(
-        child: Center(child: Text("Next page 3 ")),
-      ),
+      AccountScreen(),
     ];
   }
 
@@ -60,6 +67,12 @@ class _HomePageState extends State<HomePage> {
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.home),
         title: ("Home"),
+        activeColorPrimary: AppColors.mainColor,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.category_outlined),
+        title: ("Category"),
         activeColorPrimary: AppColors.mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

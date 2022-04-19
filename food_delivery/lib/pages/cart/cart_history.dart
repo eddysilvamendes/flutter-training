@@ -111,7 +111,7 @@ class CartHistory extends StatelessWidget {
                                     //Generate the img
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Wrap(
                                           direction: Axis.horizontal,
