@@ -2,10 +2,15 @@
 
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/controllers/categories_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
+import 'package:food_delivery/controllers/product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
+import 'package:food_delivery/pages/categories/food_categories_list.dart';
 import 'package:food_delivery/pages/food/popular_food_detail.dart';
+import 'package:food_delivery/pages/food/product_food_detail.dart';
 import 'package:food_delivery/pages/food/recommended_food_detail.dart';
+import 'package:food_delivery/pages/home/food_alternative_body.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/utils/app_constants.dart';
 import 'package:food_delivery/utils/colors.dart';
@@ -47,7 +52,9 @@ class _FoodPageBodyState extends State<FoodPageBody> {
 
   @override
   Widget build(BuildContext context) {
+    var product = Get.find<ProductController>().getProductList();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //slider section
         GetBuilder<PopularProductController>(builder: (popularProduct) {
@@ -68,23 +75,139 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                 );
         }),
         //dots
-        GetBuilder<PopularProductController>(builder: (popularProduct) {
-          return DotsIndicator(
-            dotsCount: popularProduct.popularProductList.isEmpty
-                ? 1
-                : popularProduct.popularProductList.length,
-            position: _currentPageValue,
-            decorator: DotsDecorator(
-              activeColor: AppColors.mainColor,
-              size: const Size.square(9.0),
-              activeSize: const Size(18.0, 9.0),
-              activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)),
-            ),
-          );
-        }),
-        //Recommended text
+        Center(
+          child:
+              GetBuilder<PopularProductController>(builder: (popularProduct) {
+            return DotsIndicator(
+              dotsCount: popularProduct.popularProductList.isEmpty
+                  ? 1
+                  : popularProduct.popularProductList.length,
+              position: _currentPageValue,
+              decorator: DotsDecorator(
+                activeColor: AppColors.mainColor,
+                size: const Size.square(9.0),
+                activeSize: const Size(18.0, 9.0),
+                activeShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+              ),
+            );
+          }),
+        ),
         SizedBox(height: Dimensions.height30),
+        Container(
+          margin: EdgeInsets.only(left: Dimensions.widtht30),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CustomTitleText(text: "Categories"),
+            ],
+          ),
+        ),
+        //Categorie Section
+        SizedBox(height: Dimensions.height10),
+        GetBuilder<CategoriesController>(
+          builder: (categorieController) {
+            return Container(
+              margin: EdgeInsets.only(
+                  left: Dimensions.width20, right: Dimensions.width20),
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                //physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: categorieController.categoriesList.length,
+
+                itemBuilder: (context, index) {
+                  var categories = categorieController.categoriesList[index];
+                  return GestureDetector(
+                    onTap: () {
+                      print("tapped " + categories.id.toString());
+                      Get.to(() => FoodCategorieList(
+                            pageId: categories.id,
+                            page: "foodpage",
+                            name: categories.title,
+                          ));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        right: Dimensions.width10,
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 40,
+                      child: Center(
+                        child: CustomTitleText(
+                          text: categorieController.categoriesList[index].title,
+                          //color: Colors.white,
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.radius15),
+                        color: AppColors.mainColor,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+
+        //Popular text
+        SizedBox(height: Dimensions.height30),
+        Container(
+          margin: EdgeInsets.only(
+              left: Dimensions.width20, top: Dimensions.width20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CustomTitleText(text: "Popular"),
+            ],
+          ),
+        ),
+        FoodListView(pageId: 2, url: "assets/image/food12.png"),
+        //Recommended Setion
+        SizedBox(height: Dimensions.height10),
+        Container(
+          margin: EdgeInsets.only(
+              left: Dimensions.width20, top: Dimensions.width20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CustomTitleText(text: "Recommended"),
+            ],
+          ),
+        ),
+        FoodListView(pageId: 3, url: "assets/image/food1.png"),
+        //FastFood Setion
+        SizedBox(height: Dimensions.height10),
+        Container(
+          margin: EdgeInsets.only(
+              left: Dimensions.width20, top: Dimensions.width20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CustomTitleText(text: "FastFood"),
+            ],
+          ),
+        ),
+        FoodListView(pageId: 5, url: "assets/image/food0.png"),
+        //Noodles Section
+        SizedBox(height: Dimensions.height10),
+        Container(
+          margin: EdgeInsets.only(
+              left: Dimensions.width20, top: Dimensions.width20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              CustomTitleText(text: "Noodles"),
+            ],
+          ),
+        ),
+        FoodListView(pageId: 4, url: "assets/image/food13.png"),
+        SizedBox(height: Dimensions.height30)
+
+        /*
         Container(
           margin: EdgeInsets.only(left: Dimensions.widtht30),
           child: Row(
@@ -139,14 +262,15 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                                     BorderRadius.circular(Dimensions.radius20),
                                 color: Colors.white38,
                                 image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage("assets/image/food1.png")
+                                    /*NetworkImage(
                                     AppConstants.BASE_URL +
                                         AppConstants.UPLOAD_URL +
                                         recommendedProduct
                                             .recommendedProductList[index].img,
-                                  ),
-                                ),
+                                  ),*/
+                                    ),
                               ),
                             ),
                             //Text Section Container
@@ -222,6 +346,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                   color: AppColors.mainColor,
                 );
         })
+      */
       ],
     );
   }
@@ -273,11 +398,12 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                 color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
+                  image: AssetImage("assets/image/food0.png"),
+                  /*NetworkImage(
                     AppConstants.BASE_URL +
                         AppConstants.UPLOAD_URL +
                         popularProduct.img,
-                  ),
+                  ),*/
                 ),
               ),
             ),

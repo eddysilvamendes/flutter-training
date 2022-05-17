@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/base/custon_loader.dart';
 import 'package:food_delivery/controllers/auth_controller.dart';
 import 'package:food_delivery/controllers/cart_product_controller.dart';
+import 'package:food_delivery/controllers/location_controller.dart';
 import 'package:food_delivery/controllers/user_controller.dart';
+import 'package:food_delivery/pages/address/add_address_screen.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/utils/colors.dart';
 import 'package:food_delivery/utils/dimension.dart';
@@ -19,6 +21,7 @@ class AccountScreen extends StatelessWidget {
     bool _userLoggedIn = Get.find<AuthController>().userLoggedIn();
     if (_userLoggedIn) {
       Get.find<UserController>().getUserInfo();
+      Get.find<LocationController>().getAddressList();
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -95,16 +98,48 @@ class AccountScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: Dimensions.height20),
                                   //Adress Icon
-                                  AccountWidget(
-                                    appIcon: AppIcon(
-                                      icon: Icons.location_on,
-                                      bakcgroundColor: AppColors.yellowColor,
-                                      iconColor: Colors.white,
-                                      iconSize: Dimensions.height10 * 5 / 2,
-                                      size: Dimensions.height10 * 5,
-                                    ),
-                                    customTitleText: CustomTitleText(
-                                        text: "Bairro Craveiro Lopes"),
+                                  GetBuilder<LocationController>(
+                                    builder: (locationController) {
+                                      if (_userLoggedIn &&
+                                          locationController
+                                              .addressList.isEmpty) {
+                                        return GestureDetector(
+                                          onTap: () => Get.offNamed(
+                                              RouteHelper.getAddAddressPage()),
+                                          child: AccountWidget(
+                                            appIcon: AppIcon(
+                                              icon: Icons.location_on,
+                                              bakcgroundColor:
+                                                  AppColors.yellowColor,
+                                              iconColor: Colors.white,
+                                              iconSize:
+                                                  Dimensions.height10 * 5 / 2,
+                                              size: Dimensions.height10 * 5,
+                                            ),
+                                            customTitleText: CustomTitleText(
+                                                text: "Fill in your address"),
+                                          ),
+                                        );
+                                      } else {
+                                        return GestureDetector(
+                                          onTap: () => Get.offNamed(
+                                              RouteHelper.getAddAddressPage()),
+                                          child: AccountWidget(
+                                            appIcon: AppIcon(
+                                              icon: Icons.location_on,
+                                              bakcgroundColor:
+                                                  AppColors.yellowColor,
+                                              iconColor: Colors.white,
+                                              iconSize:
+                                                  Dimensions.height10 * 5 / 2,
+                                              size: Dimensions.height10 * 5,
+                                            ),
+                                            customTitleText: CustomTitleText(
+                                                text: "Your Address"),
+                                          ),
+                                        );
+                                      }
+                                    },
                                   ),
                                   SizedBox(height: Dimensions.height20),
                                   //Message Icon

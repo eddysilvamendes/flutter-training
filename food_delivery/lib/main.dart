@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/controllers/cart_product_controller.dart';
 import 'package:food_delivery/controllers/categories_controller.dart';
+import 'package:food_delivery/controllers/location_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
+import 'package:food_delivery/controllers/product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
 import 'package:food_delivery/pages/auth/sign_in_page.dart';
 import 'package:food_delivery/pages/auth/sign_up_page.dart';
@@ -34,12 +36,16 @@ class MyApp extends StatelessWidget {
         builder: (_) {
           return GetBuilder<RecommendedProductController>(
             builder: (_) {
-              return GetMaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Loisirs Delivery',
-                //home: SignIpScreen(),
-                initialRoute: RouteHelper.getSplashPage(),
-                getPages: RouteHelper.routes,
+              return GetBuilder<ProductController>(
+                builder: (_) {
+                  return GetMaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    title: 'Loisirs Delivery',
+                    //home: CategoriesScreen(),
+                    initialRoute: RouteHelper.getSplashPage(),
+                    getPages: RouteHelper.routes,
+                  );
+                },
               );
             },
           );

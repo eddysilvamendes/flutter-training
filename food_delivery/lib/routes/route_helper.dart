@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:food_delivery/pages/account/account_page.dart';
+import 'package:food_delivery/pages/address/add_address_screen.dart';
 import 'package:food_delivery/pages/auth/sign_in_page.dart';
 import 'package:food_delivery/pages/cart/cart_page.dart';
 import 'package:food_delivery/pages/food/popular_food_detail.dart';
@@ -17,6 +19,8 @@ class RouteHelper {
   static const String cartPage = "/cart-page";
   static const String splash = "/splash-page";
   static const String signIn = "/sing-in";
+  static const String addAddress = "/add-address";
+  static const String profileScreen = "/profile-screen";
 
   //create function and add it to name of route so we can pass parameter if need
   static String getInitial() => '$initial';
@@ -27,11 +31,14 @@ class RouteHelper {
   static String getCartPage() => '$cartPage';
   static String getSplashPage() => '$splash';
   static String getSignInPage() => '$signIn';
+  static String getAddAddressPage() => "$addAddress";
+  static String getAccountScree() => "$profileScreen";
 
   //get list of page to change pages
   static List<GetPage> routes = [
+    GetPage(name: profileScreen, page: () => AccountScreen()),
     GetPage(name: splash, page: () => SplashScreen()),
-    GetPage(name: initial, page: () => HomePage()),
+    GetPage(name: initial, page: () => HomePage(), transition: Transition.fade),
     GetPage(
         name: signIn,
         page: () {
@@ -73,6 +80,13 @@ class RouteHelper {
         return CartPage();
       },
       transition: Transition.fadeIn,
-    )
+    ),
+
+    GetPage(
+      name: addAddress,
+      page: () {
+        return AddAddressPage();
+      },
+    ),
   ];
 }

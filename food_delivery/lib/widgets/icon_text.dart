@@ -6,11 +6,15 @@ class IconText extends StatelessWidget {
   final IconData icon;
   final String text;
   final Color iconColor;
+  final Color? textColor;
+  final double? size;
   const IconText(
       {Key? key,
       required this.icon,
       required this.text,
-      required this.iconColor})
+      required this.iconColor,
+      this.size = 12,
+      this.textColor})
       : super(key: key);
 
   @override
@@ -25,6 +29,8 @@ class IconText extends StatelessWidget {
         SizedBox(width: 5),
         CustomSubTitleText(
           text: text,
+          size: size!,
+          color: textColor,
         ),
       ],
     );

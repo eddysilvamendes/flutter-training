@@ -1,14 +1,18 @@
 import 'package:food_delivery/controllers/auth_controller.dart';
 import 'package:food_delivery/controllers/cart_product_controller.dart';
 import 'package:food_delivery/controllers/categories_controller.dart';
+import 'package:food_delivery/controllers/location_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
+import 'package:food_delivery/controllers/product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
 import 'package:food_delivery/controllers/user_controller.dart';
 import 'package:food_delivery/data/api/api_client.dart';
 import 'package:food_delivery/data/repository/auth_repo.dart';
 import 'package:food_delivery/data/repository/cart_product_repo.dart';
 import 'package:food_delivery/data/repository/categories_repo.dart';
+import 'package:food_delivery/data/repository/location_repo.dart';
 import 'package:food_delivery/data/repository/popular_product_repo.dart';
+import 'package:food_delivery/data/repository/product_repo.dart';
 import 'package:food_delivery/data/repository/recommended_product_repo.dart';
 import 'package:food_delivery/data/repository/user_repo.dart';
 import 'package:food_delivery/utils/app_constants.dart';
@@ -29,6 +33,9 @@ Future<void> init() async {
   Get.lazyPut(
       () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
   Get.lazyPut(() => UserRepo(apiClient: Get.find()));
+  Get.lazyPut(
+      () => LocationRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+  Get.lazyPut(() => ProductRepo(apiClient: Get.find()));
 
   //Controller
   Get.lazyPut(() => PopularProductController(popularProductRepo: Get.find()));
@@ -38,4 +45,6 @@ Future<void> init() async {
   Get.lazyPut(() => CategoriesController(categoriesRepo: Get.find()));
   Get.lazyPut(() => AuthController(authRepo: Get.find()));
   Get.lazyPut(() => UserController(userRepo: Get.find()));
+  Get.lazyPut(() => LocationController(locationRepo: Get.find()));
+  Get.lazyPut(() => ProductController(productRepo: Get.find()));
 }

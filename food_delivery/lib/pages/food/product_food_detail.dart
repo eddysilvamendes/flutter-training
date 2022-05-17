@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/controllers/cart_product_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
+import 'package:food_delivery/controllers/product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
 import 'package:food_delivery/pages/cart/cart_page.dart';
 import 'package:food_delivery/routes/route_helper.dart';
@@ -14,17 +15,15 @@ import 'package:food_delivery/widgets/custom_text.dart';
 import 'package:food_delivery/widgets/expandable_text_widget.dart';
 import 'package:get/get.dart';
 
-class RecommendedFoodDetail extends StatelessWidget {
+class ProductFoodDetail extends StatelessWidget {
   final int pageId;
   final String page;
-  const RecommendedFoodDetail(
-      {Key? key, required this.pageId, required this.page})
+  const ProductFoodDetail({Key? key, required this.pageId, required this.page})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var product =
-        Get.find<RecommendedProductController>().recommendedProductList[pageId];
+    var product = Get.find<ProductController>().productList[pageId];
     Get.find<PopularProductController>()
         .initProduct(product, Get.find<CartController>());
     return Scaffold(
