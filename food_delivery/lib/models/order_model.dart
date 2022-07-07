@@ -61,12 +61,12 @@ class OrderModel {
     userId = json['user_id'];
     orderAmount = json['order_amount'].toDouble();
     paymentStatus = json['payment_status'] ?? "pending";
-    totalTaxAmount = 10.0;
+    totalTaxAmount = 15.0;
     orderNote = json['order_note'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     orderStatus = json['order_status'];
-    deliveryCharge = 10.0;
+    deliveryCharge = 150.0;
     scheduleAt = json['schedule_at'] ?? "";
     otp = json['otp'];
     pending = json['pending'] ?? "";

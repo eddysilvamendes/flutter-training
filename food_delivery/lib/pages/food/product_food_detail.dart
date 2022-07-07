@@ -118,12 +118,11 @@ class ProductFoodDetail extends StatelessWidget {
               backgroundColor: AppColors.yellowColor,
               expandedHeight: 300,
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset("assets/image/food0.png"),
-                /*Image.network(
+                background: Image.network(
                   AppConstants.BASE_URL + AppConstants.UPLOAD_URL + product.img,
                   width: double.maxFinite,
                   fit: BoxFit.cover,
-                ),*/
+                ),
               ),
             ),
             SliverToBoxAdapter(

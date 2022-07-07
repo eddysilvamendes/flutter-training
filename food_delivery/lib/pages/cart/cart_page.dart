@@ -5,8 +5,11 @@ import 'package:food_delivery/base/no_data.dart';
 import 'package:food_delivery/controllers/auth_controller.dart';
 import 'package:food_delivery/controllers/cart_product_controller.dart';
 import 'package:food_delivery/controllers/location_controller.dart';
+import 'package:food_delivery/controllers/order_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
+import 'package:food_delivery/controllers/user_controller.dart';
+import 'package:food_delivery/models/place_order_model.dart';
 import 'package:food_delivery/pages/food/popular_food_detail.dart';
 import 'package:food_delivery/pages/food/recommended_food_detail.dart';
 import 'package:food_delivery/routes/route_helper.dart';
@@ -291,21 +294,44 @@ class CartPage extends StatelessWidget {
                       //add to card container
                       GestureDetector(
                         onTap: () {
-                          cartProduct.addToHistory();
-                          /*if (Get.find<AuthController>().userLoggedIn()) {
-                            //cartProduct.addToHistory();
+                          //cartProduct.addToHistory();
+                          /* if (Get.find<AuthController>().userLoggedIn()) {
+                            cartProduct.addToHistory();
                             if (Get.find<LocationController>()
                                 .addressList
                                 .isEmpty) {
                               Get.toNamed(RouteHelper.getAddAddressPage());
                             } else {
-                              Get.off(
-                                RouteHelper.getInitial(),
-                              );
+                              //Get.off(RouteHelper.getInitial());
+                              Get.offNamed(RouteHelper.getPaymentPage("100001",
+                                  Get.find<UserController>().userModel!.id));
                             }
                           } else {
                             Get.toNamed(RouteHelper.getSignInPage());
                           }*/
+                          if (Get.find<AuthController>().userLoggedIn()) {
+                            var location =
+                                Get.find<LocationController>().getUserAddress();
+                            var cart = Get.find<CartController>().getItems;
+                            var user = Get.find<UserController>().userModel;
+                            PlaceOrderBody placeOrder = PlaceOrderBody(
+                              cart: cart,
+                              orderAmount: 100.0,
+                              orderNote: "Note About the food",
+                              address: location.address,
+                              latitude: location.latitude,
+                              longitude: location.longitude,
+                              contactPersonName: user!.name,
+                              contactPersonNumber: user.phone,
+                              distance: 10.0,
+                              scheduleAt: '',
+                            );
+
+                            Get.find<OrderController>()
+                                .placeOrder(_callBack, placeOrder);
+                          } else {
+                            Get.toNamed(RouteHelper.getSignInPage());
+                          }
                         },
                         child: Container(
                           padding: EdgeInsets.only(
@@ -332,5 +358,16 @@ class CartPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _callBack(bool isSuccess, String message, String orderID) {
+    if (isSuccess) {
+      Get.offNamed(
+        RouteHelper.getPaymentPage(
+            orderID, Get.find<UserController>().userModel!.id),
+      );
+    } else {
+      Get.snackbar("Error", message, snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }

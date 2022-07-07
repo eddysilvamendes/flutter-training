@@ -3,6 +3,7 @@ import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/product_controller.dart';
 import 'package:food_delivery/pages/food/product_food_detail.dart';
 import 'package:food_delivery/pages/food/recommended_food_detail.dart';
+import 'package:food_delivery/utils/app_constants.dart';
 import 'package:food_delivery/utils/colors.dart';
 import 'package:food_delivery/utils/dimension.dart';
 import 'package:food_delivery/widgets/custom_text.dart';
@@ -24,7 +25,7 @@ class FoodCategorieList extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Categories"),
+          title: Text(name),
           elevation: 0.0,
           centerTitle: true,
           backgroundColor: AppColors.mainColor,
@@ -33,16 +34,6 @@ class FoodCategorieList extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      left: Dimensions.widtht30, top: Dimensions.widtht30),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      CustomTitleText(text: name),
-                    ],
-                  ),
-                ),
                 SizedBox(height: Dimensions.height15),
                 //List of recommended food and images
                 GetBuilder<ProductController>(builder: (productController) {
@@ -75,13 +66,14 @@ class FoodCategorieList extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(
                                               Dimensions.radius20),
                                           color: Colors.white38,
-                                          image: const DecorationImage(
+                                          image: DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: AssetImage(
-                                                "assets/image/food1.png"),
-                                            /* NetworkImage(
-                                              "http://192.168.1.76:8000/uploads/${productController.productList[index].img}",
-                                            ),*/
+                                            image: NetworkImage(
+                                              AppConstants.BASE_URL +
+                                                  AppConstants.UPLOAD_URL +
+                                                  productController
+                                                      .productList[index].img,
+                                            ),
                                           ),
                                         ),
                                       ),

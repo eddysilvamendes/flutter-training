@@ -10,7 +10,7 @@ import 'package:food_delivery/pages/categories/food_categories_list.dart';
 import 'package:food_delivery/pages/food/popular_food_detail.dart';
 import 'package:food_delivery/pages/food/product_food_detail.dart';
 import 'package:food_delivery/pages/food/recommended_food_detail.dart';
-import 'package:food_delivery/pages/home/food_alternative_body.dart';
+import 'package:food_delivery/widgets/food_horizontal_list.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/utils/app_constants.dart';
 import 'package:food_delivery/utils/colors.dart';
@@ -52,7 +52,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    var product = Get.find<ProductController>().getProductList();
+    Get.find<ProductController>().getProductList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -70,8 +70,10 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                     },
                   ),
                 )
-              : CircularProgressIndicator(
-                  color: AppColors.mainColor,
+              : Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.mainColor,
+                  ),
                 );
         }),
         //dots
@@ -110,7 +112,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
             return Container(
               margin: EdgeInsets.only(
                   left: Dimensions.width20, right: Dimensions.width20),
-              height: 50,
+              height: Dimensions.height30 + Dimensions.height20,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 //physics: NeverScrollableScrollPhysics(),
@@ -133,11 +135,12 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                         right: Dimensions.width10,
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 40,
+                      height: Dimensions.height20 * 2,
                       child: Center(
                         child: CustomTitleText(
                           text: categorieController.categoriesList[index].title,
-                          //color: Colors.white,
+                          color: Colors.white,
+                          //size: Dimensions.font16,
                         ),
                       ),
                       decoration: BoxDecoration(
@@ -398,12 +401,12 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                 color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage("assets/image/food0.png"),
-                  /*NetworkImage(
+                  image: //AssetImage("assets/image/food0.png"),
+                      NetworkImage(
                     AppConstants.BASE_URL +
                         AppConstants.UPLOAD_URL +
                         popularProduct.img,
-                  ),*/
+                  ),
                 ),
               ),
             ),

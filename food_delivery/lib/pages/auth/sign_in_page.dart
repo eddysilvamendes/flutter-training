@@ -17,18 +17,18 @@ class SignIpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var emailController = TextEditingController();
+    var phoneController = TextEditingController();
     var passwordController = TextEditingController();
     void _registration(AuthController authController) {
       String password = passwordController.text.trim();
-      String email = emailController.text.trim();
+      String phone = phoneController.text.trim();
 
-      if (!GetUtils.isEmail(email)) {
+      if (phone.length != 7) {
         Get.snackbar("Error", "Email is wrong!");
       } else if (password.length < 6) {
         Get.snackbar("Error", "Password must be more then 6");
       } else {
-        authController.login(email, password).then((status) {
+        authController.login(phone, password).then((status) {
           if (status.isSuccess) {
             Get.toNamed(RouteHelper.getInitial());
             Get.snackbar("Success", "Welcome");
@@ -43,7 +43,7 @@ class SignIpScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromRGBO(24, 85, 149, 1),
       body: GetBuilder<AuthController>(
         builder: (authController) {
           return !authController.isLoading
@@ -51,21 +51,26 @@ class SignIpScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      SizedBox(height: Dimensions.screenHeight * 0.05),
+                      SizedBox(height: Dimensions.screenHeight * 0.15),
                       //Image logo
                       Container(
                         height: Dimensions.screenHeight * 0.25,
                         child: Center(
-                          child: CircleAvatar(
+                          /*child: CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            radius: Dimensions.radius20 + Dimensions.radius30,
+                            radius:
+                                Dimensions.radius30 * 2 + Dimensions.radius30,
                             backgroundImage:
-                                const AssetImage("assets/image/logotipo.png"),
+                                const AssetImage("assets/image/logo2.png"),
+                          ),*/
+                          child: Image(
+                            image: AssetImage("assets/image/logo2.png"),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       //Welcome Text
-                      Container(
+                      /* Container(
                         margin: EdgeInsets.only(left: Dimensions.width20),
                         width: double.maxFinite,
                         child: Column(
@@ -87,12 +92,12 @@ class SignIpScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ),
+                      ),*/
                       SizedBox(height: Dimensions.height20),
                       AppTextField(
-                        textController: emailController,
-                        text: "Email",
-                        icon: Icons.email,
+                        textController: phoneController,
+                        text: "Phone",
+                        icon: Icons.phone,
                       ),
                       SizedBox(height: Dimensions.height20),
                       AppTextField(
@@ -108,6 +113,7 @@ class SignIpScreen extends StatelessWidget {
                           MyButtom(
                             text: "Sign in",
                             onTap: () => _registration(authController),
+                            color: Color.fromRGBO(255, 186, 49, 0.973),
                           ),
                           SizedBox(height: Dimensions.height10),
                           RichText(
@@ -116,7 +122,7 @@ class SignIpScreen extends StatelessWidget {
                                 ..onTap = () => print("Recover password?"),
                               text: "Forgot password",
                               style: TextStyle(
-                                color: Colors.grey[500],
+                                color: Colors.white,
                                 fontSize: Dimensions.font16,
                               ),
                             ),
@@ -128,7 +134,7 @@ class SignIpScreen extends StatelessWidget {
                         text: TextSpan(
                           text: "Don\'t have an account?",
                           style: TextStyle(
-                            color: Colors.grey[500],
+                            color: Colors.white,
                             fontSize: Dimensions.font20,
                           ),
                           children: [
@@ -138,7 +144,7 @@ class SignIpScreen extends StatelessWidget {
                                     () => Get.to(() => const SignUpScreen()),
                               text: " Create",
                               style: TextStyle(
-                                color: AppColors.mainBlackColor,
+                                color: Colors.white,
                                 fontSize: Dimensions.font20 + 2,
                                 fontWeight: FontWeight.bold,
                               ),

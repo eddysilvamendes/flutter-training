@@ -122,8 +122,8 @@ class AccountScreen extends StatelessWidget {
                                         );
                                       } else {
                                         return GestureDetector(
-                                          onTap: () => Get.offNamed(
-                                              RouteHelper.getAddAddressPage()),
+                                          onTap: () =>
+                                              Get.to(() => AddAddressPage()),
                                           child: AccountWidget(
                                             appIcon: AppIcon(
                                               icon: Icons.location_on,
@@ -165,6 +165,8 @@ class AccountScreen extends StatelessWidget {
                                         Get.find<CartController>().clear();
                                         Get.find<CartController>()
                                             .clearCartHistory();
+                                        Get.find<LocationController>()
+                                            .clearAddressList();
                                         Get.offNamed(
                                             RouteHelper.getSignInPage());
                                       } else {

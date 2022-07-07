@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:food_delivery/data/api/api_checker.dart';
 import 'package:food_delivery/data/repository/location_repo.dart';
 import 'package:food_delivery/models/address_model.dart';
 import 'package:food_delivery/models/response_model.dart';
@@ -7,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class LocationController extends GetxController implements GetxService {
   LocationRepo locationRepo;
@@ -43,6 +46,19 @@ class LocationController extends GetxController implements GetxService {
   GoogleMapController get mapController => _mapController;
   List<AddressModel> get allAddressList => _allAdressList;
 
+  /*Variable for service zone */
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  //the user is in service zone or not
+  bool _inZone = false;
+  bool get inZone => _inZone;
+  //Show and hide the button as the map loads
+  bool _buttonDisable = true;
+  bool get buttonDisable => _buttonDisable;
+
+  //Save the google map Sugestion for address
+  List<Prediction> _preditionList = [];
+
   void setMapController(GoogleMapController mapController) {
     _mapController = mapController;
   }
@@ -63,9 +79,7 @@ class LocationController extends GetxController implements GetxService {
             speed: 1,
             speedAccuracy: 1,
           );
-          print("Passou position");
         } else {
-          print("dentro do  else");
           _pickPosition = Position(
             latitude: position.target.latitude,
             longitude: position.target.longitude,
@@ -77,6 +91,14 @@ class LocationController extends GetxController implements GetxService {
             speedAccuracy: 1,
           );
         }
+
+        ResponseModel _responseModel = await getZone(
+            position.target.latitude.toString(),
+            position.target.longitude.toString(),
+            false);
+        //if buttom is false whe are in the service area
+        _buttonDisable = !_responseModel.isSuccess;
+
         //Where we start to talk to the server to get a string of address from google
         if (_changeAddress) {
           String _address = await getAddressfromGeoCode(
@@ -88,18 +110,27 @@ class LocationController extends GetxController implements GetxService {
           fromAddress
               ? _placemark = Placemark(name: _address)
               : _pickPlacemark = Placemark(name: _address);
+        } else {
+          _changeAddress = true;
         }
       } catch (e) {
         print(e);
         print("Error On TryCatch");
       }
+
+      _loading = false;
+      update();
+    } else {
+      _updateAddressData = true;
     }
   }
 
   Future<String> getAddressfromGeoCode(LatLng latLng) async {
-    String _address = "Unknown Location Found";
+    String _address = "Sem Localização";
 
     Response response = await locationRepo.getAddressfromGeoCode(latLng);
+    print("Lat " + latLng.latitude.toString());
+    print("lng " + latLng.longitude.toString());
 
     if (response.body["status"] == "OK") {
       print("response body" + response.body.toString());
@@ -167,5 +198,104 @@ class LocationController extends GetxController implements GetxService {
   Future<bool> saveUserAddress(AddressModel addressModel) async {
     String userAddress = jsonEncode(addressModel.toJson());
     return await locationRepo.saveUserAddress(userAddress);
+  }
+
+  void clearAddressList() {
+    _addressList = [];
+    _allAdressList = [];
+    update();
+  }
+
+  String getUserAddressFromLocalStorage() {
+    return locationRepo.getUserAddress();
+  }
+
+  void setAddAddressData() {
+    _position = _pickPosition;
+    _placemark = _pickPlacemark;
+    _updateAddressData = false;
+    update();
+  }
+
+  Future<ResponseModel> getZone(String lat, String lng, bool markerLoad) async {
+    late ResponseModel _responseModel;
+
+    if (markerLoad) {
+      _loading = true;
+    } else {
+      _isLoading = true;
+    }
+    update();
+    Response response = await locationRepo.getZone(lat, lng);
+    if (response.statusCode == 200) {
+      _inZone = true;
+      _responseModel = ResponseModel(true, response.body["zone_id"].toString());
+    } else {
+      _inZone = false;
+      _responseModel = ResponseModel(true, response.statusText!);
+    }
+    if (markerLoad) {
+      _loading = false;
+    } else {
+      _isLoading = false;
+    }
+    print("Zone response " + response.statusCode.toString());
+    update();
+    return _responseModel;
+  }
+
+  Future<List<Prediction>> searchLocation(
+      BuildContext context, String text) async {
+    if (text.isNotEmpty) {
+      Response response = await locationRepo.searchLocation(text);
+      if (response.statusCode == 200 && response.body['status'] == 'OK') {
+        _preditionList = [];
+        response.body['predictions'].forEach(
+          (prediction) => _preditionList.add(
+            Prediction.fromJson(prediction),
+          ),
+        );
+      } else {
+        ApiChecker.checkApi(response);
+      }
+    }
+    return _preditionList;
+  }
+
+  setLocation(
+      String placeID, String address, GoogleMapController mapController) async {
+    _loading = true;
+    update();
+    PlacesDetailsResponse detail;
+    Response response = await locationRepo.setLocation(placeID);
+    detail = PlacesDetailsResponse.fromJson(response.body);
+    _pickPosition = Position(
+      latitude: detail.result.geometry!.location.lat,
+      longitude: detail.result.geometry!.location.lng,
+      timestamp: DateTime.now(),
+      accuracy: 1,
+      altitude: 1,
+      heading: 1,
+      speed: 1,
+      speedAccuracy: 1,
+    );
+    _pickPlacemark = Placemark(name: address);
+    _changeAddress = false;
+    if (!mapController.isNull) {
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+              detail.result.geometry!.location.lat,
+              detail.result.geometry!.location.lng,
+            ),
+            zoom: 17,
+          ),
+        ),
+      );
+    }
+
+    _loading = false;
+    update();
   }
 }

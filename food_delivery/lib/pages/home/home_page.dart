@@ -7,7 +7,6 @@ import 'package:food_delivery/pages/address/add_address_screen.dart';
 import 'package:food_delivery/pages/auth/sign_in_page.dart';
 import 'package:food_delivery/pages/cart/cart_history.dart';
 import 'package:food_delivery/pages/cart/cart_page.dart';
-import 'package:food_delivery/pages/home/food_alternative_body.dart';
 import 'package:food_delivery/pages/home/main_food_page.dart';
 import 'package:food_delivery/utils/colors.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -53,10 +52,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      //SignIpScreen(),
       MainFoodPage(),
       //AddAddressPage(),
-      SignIpScreen(),
       CartHistory(),
       CartPage(),
       AccountScreen(),
@@ -68,12 +65,6 @@ class _HomePageState extends State<HomePage> {
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.home),
         title: ("Home"),
-        activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.category_outlined),
-        title: ("Category"),
         activeColorPrimary: AppColors.mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
@@ -92,6 +83,7 @@ class _HomePageState extends State<HomePage> {
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.profile_circled),
         title: ("Profile"),
+        textStyle: TextStyle(color: Colors.white),
         activeColorPrimary: AppColors.mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

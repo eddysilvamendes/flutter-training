@@ -10,6 +10,7 @@ import 'package:food_delivery/widgets/custom_text.dart';
 import 'package:food_delivery/widgets/my_button.dart';
 import 'package:food_delivery/widgets/my_text_field.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class SignUpScreen extends StatelessWidget {
       String phone = phoneController.text.trim();
       String password = passwordController.text.trim();
       String email = emailController.text.trim();
+      DateTime _selectedDate = DateTime.now();
 
       if (name.isEmpty || phone.isEmpty || password.isEmpty || email.isEmpty) {
         Get.snackbar("Error", "All field is required");
@@ -42,7 +44,10 @@ class SignUpScreen extends StatelessWidget {
           password: password,
           email: email,
           phone: phone,
+          //creatAt: DateFormat.yMd().format(_selectedDate),
+          //updateAt: DateFormat.yMd().format(_selectedDate),
         );
+        print(DateFormat.yMd().format(_selectedDate));
         authController.registration(signUpBody).then((status) {
           if (status.isSuccess) {
             print("success");
@@ -60,7 +65,7 @@ class SignUpScreen extends StatelessWidget {
 
     void validation() {}
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromRGBO(24, 85, 149, 1),
       body: GetBuilder<AuthController>(
         builder: ((_authcontroller) {
           return !_authcontroller.isLoading
@@ -68,16 +73,21 @@ class SignUpScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      SizedBox(height: Dimensions.screenHeight * 0.05),
+                      SizedBox(height: Dimensions.screenHeight * 0.15),
                       //Image logo
                       Container(
                         height: Dimensions.screenHeight * 0.25,
                         child: Center(
-                          child: CircleAvatar(
+                          /*child: CircleAvatar(
                             backgroundColor: Colors.transparent,
-                            radius: Dimensions.radius20 + Dimensions.radius30,
+                            radius:
+                                Dimensions.radius30 * 2 + Dimensions.radius30,
                             backgroundImage:
-                                const AssetImage("assets/image/logotipo.png"),
+                                const AssetImage("assets/image/logo2.png"),
+                          ),*/
+                          child: Image(
+                            image: AssetImage("assets/image/logo2.png"),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -109,6 +119,7 @@ class SignUpScreen extends StatelessWidget {
                       MyButtom(
                         text: "Sign up",
                         onTap: () => _registration(_authcontroller),
+                        color: Color.fromRGBO(255, 186, 49, 0.973),
                       ),
                       SizedBox(height: Dimensions.height10),
                       RichText(
@@ -117,7 +128,7 @@ class SignUpScreen extends StatelessWidget {
                             ..onTap = () => Get.back(),
                           text: "Have and account already?",
                           style: TextStyle(
-                            color: Colors.grey[500],
+                            //color: Colors.white,
                             fontSize: Dimensions.font20,
                           ),
                         ),
@@ -127,7 +138,7 @@ class SignUpScreen extends StatelessWidget {
                         text: TextSpan(
                           text: "Sign up using one of the following methods?",
                           style: TextStyle(
-                            color: Colors.grey[500],
+                            // color: Colors.grey[500],
                             fontSize: Dimensions.font16,
                           ),
                         ),
@@ -145,7 +156,8 @@ class SignUpScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SizedBox(height: Dimensions.screenHeight * 0.02),
                     ],
                   ),
                 )

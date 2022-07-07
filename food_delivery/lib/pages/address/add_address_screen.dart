@@ -4,6 +4,7 @@ import 'package:food_delivery/controllers/location_controller.dart';
 import 'package:food_delivery/controllers/user_controller.dart';
 import 'package:food_delivery/models/address_model.dart';
 import 'package:food_delivery/pages/account/account_page.dart';
+import 'package:food_delivery/pages/address/pick_address_map.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/utils/colors.dart';
 import 'package:food_delivery/utils/dimension.dart';
@@ -25,18 +26,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
   final TextEditingController _contactPersonName = TextEditingController();
   final TextEditingController _contactPersonNumber = TextEditingController();
   late bool _isLogged;
-  CameraPosition _cameraPosition = const CameraPosition(
-      target: LatLng(
-        //16.0228556,-25.1098547 Cabo verde
-        45.51563,
-        -122.677433,
-      ),
-      zoom: 17);
+  CameraPosition _cameraPosition =
+      CameraPosition(target: LatLng(14.933050, -23.513327), zoom: 17);
   late LatLng _initialPosition = LatLng(
-    //16.0228556,-25.1098547 Cabo verde
-    45.51563,
-    -122.677433,
-  );
+      //16.0228556,-25.1098547 Cabo verde
+      14.933050,
+      -23.513327);
   @override
   void initState() {
     super.initState();
@@ -45,6 +40,11 @@ class _AddAddressPageState extends State<AddAddressPage> {
       Get.find<UserController>().getUserInfo();
     }
     if (Get.find<LocationController>().addressList.isNotEmpty) {
+      if (Get.find<LocationController>().getUserAddressFromLocalStorage() ==
+          "") {
+        Get.find<LocationController>()
+            .saveUserAddress(Get.find<LocationController>().addressList.last);
+      }
       Get.find<LocationController>().getUserAddress();
       _cameraPosition = CameraPosition(
           target: LatLng(
@@ -64,6 +64,8 @@ class _AddAddressPageState extends State<AddAddressPage> {
       appBar: AppBar(
         title: const Text("Address Screen"),
         backgroundColor: AppColors.mainColor,
+        elevation: 0.0,
+        centerTitle: true,
       ),
       body: GetBuilder<UserController>(
         builder: (userController) {
@@ -79,7 +81,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           return GetBuilder<LocationController>(
             builder: (locationController) {
               _addressController.text =
-                  '${locationController.placeMark.name ?? 'Location Not Found!'}'
+                  '${locationController.placeMark.name ?? ''}'
                   '${locationController.placeMark.locality ?? ''}'
                   '${locationController.placeMark.postalCode ?? ''}'
                   '${locationController.placeMark.country ?? ''}';
@@ -102,6 +104,15 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       child: Stack(
                         children: [
                           GoogleMap(
+                            onTap: (latlng) {
+                              Get.toNamed(RouteHelper.getPickAddressPage(),
+                                  arguments: PickAddressMap(
+                                    fromAddress: true,
+                                    fromSignup: false,
+                                    googleMapController:
+                                        locationController.mapController,
+                                  ));
+                            },
                             initialCameraPosition: CameraPosition(
                                 target: _initialPosition, zoom: 17),
                             zoomControlsEnabled: false,

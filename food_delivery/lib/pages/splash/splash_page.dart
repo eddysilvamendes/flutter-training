@@ -32,15 +32,15 @@ class _SplashScreenState extends State<SplashScreen>
     _loadResources();
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
     )..forward();
 
     animation = CurvedAnimation(
       parent: animationController,
-      curve: Curves.linear,
+      curve: Curves.ease,
     );
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 4),
       () => Get.offNamed(
         RouteHelper.getInitial(),
       ),
@@ -51,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(24, 85, 149, 1),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -58,17 +59,17 @@ class _SplashScreenState extends State<SplashScreen>
             scale: animation,
             child: Center(
               child: Image.asset(
-                "assets/image/logotipo.png",
+                "assets/image/logo2.png",
                 width: Dimensions.splashImg,
               ),
             ),
           ),
-          Center(
+          /* Center(
             child: Image.asset(
               "assets/image/logo part 2.png",
               width: Dimensions.splashImg,
             ),
-          ),
+          ),*/
         ],
       ),
     );

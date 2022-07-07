@@ -23,13 +23,13 @@ class AuthRepo {
   Future<Response> login(String email, String password) async {
     return await apiClient.postData(
       AppConstants.LOGIN_URI,
-      {"email": email, "password": password},
+      {"phone": email, "password": password},
     );
   }
 
   Future<bool> saveUserToken(String token) async {
     apiClient.token = token;
-    apiClient.updateHader(token);
+    apiClient.updateHeader(token);
     return await sharedPreferences.setString(AppConstants.TOKEN, token);
   }
 
@@ -55,7 +55,7 @@ class AuthRepo {
     sharedPreferences.remove(AppConstants.PASSWORD);
     sharedPreferences.remove(AppConstants.PHONE);
     apiClient.token = "";
-    apiClient.updateHader("");
+    apiClient.updateHeader("");
     return true;
   }
 }

@@ -6,7 +6,9 @@ import 'package:food_delivery/widgets/custom_text.dart';
 class MyButtom extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  const MyButtom({Key? key, required this.text, required this.onTap})
+  final Color? color;
+  const MyButtom(
+      {Key? key, required this.text, required this.onTap, this.color})
       : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class MyButtom extends StatelessWidget {
         height: Dimensions.screenHeight / 13,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.radius15),
-          color: AppColors.mainColor,
+          color: color == null ? AppColors.mainColor : color,
         ),
         child: Center(
           child: CustomTitleText(
